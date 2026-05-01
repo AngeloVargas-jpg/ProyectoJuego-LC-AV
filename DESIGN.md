@@ -81,6 +81,7 @@ Visual Studio Code
 “Contrato 21: El pacto de sangre”, es un juego de cartas basado en el clásico 21 blackjack, con una estética tenebrosa/industrial, donde te enfrentarás al “Crupier”, una calavera robótica que busca eliminarte, Apuesta fichas para multiplicar tu dinero entre partida para comprar los objetos que te proporciona la mesa para sacar ventaja.
 
 ## Mecánica:
+```
 Mecánica principal del blackjack 21, se proporciona una carta oculta al jugador 1 y al crupier, y una carta boca arriba que pueden ver ambos, el objetivo es pedir o quedarse considerando que el que más cerca queda de 21 (sumando todas las cartas) gana.
 Inclusión de “Objetos”, que pueden cambiar el rumbo del juego, otorgar ventajas o desventajas a la partida.
 Pistola: Parte cada partida con 1 bala en recamara, si la usas, tiene 50% de chances de sumar o restar 5 al total del crupier o a ti mismo, tienes un 15% de chances de que te den una bala cada turno, puedes comprar más balas en la tienda usando fichas/dinero.
@@ -90,19 +91,24 @@ Comodín: Partes con 0 cada partida, sin embargo, por cada turno tienes un 20% d
 Copa de Vino: La copa parte vacía cada partida, cada turno hay un 20% de chances de que se llene ¼ de esta, también puedes llenar ¼ de la copa (acumulable) con fichas/dinero en la tienda, devuelve la última carta que pediste.
 Encendedor: Parte apagado cada partida, cada turno hay un 20% de chances de que den ¼ de carga, también puedes comprar ¼ de carga con fichas/dinero en la tienda, tienes un 70% de chance de ver la carta oculta del crupier por el resto de la partida.
 Mecánica de Dinero/Apuestas: El jugador y el crupier parten con 500 fichas/dinero cada turno, deben apostar un mínimo de 50 fichas por turno, pueden subir o mantener la apuesta, si uno sube la apuesta y el otro decide no apostar esa cantidad, se bloquea el uso de todos los objetos por ese turno, el dinero puede ser usado en la tienda entre turnos.
+```
 ### Tienda: 
 Puedes comprar cargas de los objetos usando el dinero ganado por medio de las apuestas.
 
 ## Flujo de juego:
+```
 La partida comienza con dos cartas tanto para el crupier como para el jugador, la primera permanece oculta para el otro jugador, por lo que solo estará visible una de las cartas. 
 Puede comenzar su turno el crupier o el jugador de forma aleatoria, comienza la fase de apuestas, quien tiene el turno debe hacer la apuesta mínima, subirla o negar la apuesta, si niega la apuesta pierde la posibilidad de utilizar objetos durante ese turno, antes o después de hacer/negar la apuesta puede comprar en la tienda cargas de objetos, luego de hacer/negar la apuesta comienza la partida con 3 opciones.
 1.- Pedir: Pide una carta, puede salir del 1 al 13, esta se suma al total de tus cartas
 2.-Quedarse: Pasa turno sin pedir una carta, quedándote con las cartas que están en la mesa.
 3.-Usar Objeto: Puedes usar un objeto de los disponibles para obtener ventajas. (debe usarse antes de pedir o quedarse) 
 Luego de pedir o quedarse, pasa turno al siguiente jugador (jugador o crupier), que puede hacer lo mismo, cada turno se debe hacer/subir/negar las apuestas, si negaste previamente una apuesta, en tu siguiente turno decides si negar (manteniendo el bloqueo de los objetos) o realizar la apuesta.  La partida acaba una vez ambos jugadores deciden quedarse, se cuentan los totales de ambos y el que este más cerca de 21 gana y suma uno al contador de victorias, además se lleva el dinero de las apuestas.
+```
 ### Ejemplo de victoria:
+```
 Jugador:19, Crupier:22, victoria crupier
 Jugador:20, Crupier:22, victoria jugador por estar debajo de 21.
 En casos de empate, el que esté por debajo de 21 siempre tendrá la ventaja, si ambos tienen 21, se declara empate y la apuesta se anula, el que gana se le suma uno al contador de victorias. 
 Terminada una partida, comienza una nueva repitiendo el mismo ciclo
 Gana el juego total quien logra sacar una ventaja de 2 partidas, ejemplo jugador 2-0 crupier, o jugador 4-2 crupier. 
+```
