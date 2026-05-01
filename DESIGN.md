@@ -18,7 +18,7 @@ Elegimos este FrameWork descartando React y Angular ya que existe una leve exper
 # Gestor de paquetes: Pnpm
 ### Estructura de carpetas:
 El proyecto tendra varias carpetas que tendran respectivos archivos con sus propias funcionalidades pero que se conectaran entre si para el funcionamiento del juego.
-´´´
+```
 Carpeta 1: Public/
 Archivos: Index.html
 Carpeta 2: Src/
@@ -57,7 +57,7 @@ Vite.config.js
 .gitignore
 Dockerfile
 .dockerignore
-´´´
+```
 ### Dependencias
 Base del proyecto
 Vue.js : Framework principal 
