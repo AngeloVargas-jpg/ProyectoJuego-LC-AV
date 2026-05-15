@@ -12,16 +12,16 @@
 
 |**Tarea**|**Estado**|
 |-|-|
-|Reorganizar estructura, mover archivos |Completado|
-|Crear lógica con estado inicial del juego (sin tienda ni objetos) en gamestore.js |Completado|
-|Crear componentes GameView y MenuView |Completado|
-|Crear sistema de fichas en gamestore.js|Pendiente|
-|Logica de apuestas |Pendiente|
-|Implementación de objetos |Pendiente|
-|Implementación objeto Pistola|Pendiente|
-|Implementación objeto Comodín |Pendiente|
-|Implementación objeto Copa de vino|Pendiente|
-|Crear componente ScreenDisplay|Pendiente|
+|Reorganizar estructura, mover archivos|Completado|
+|Crear lógica con estado inicial del juego (sin tienda ni objetos) en gamestore.js|Completado|
+|Crear componentes GameView y MenuView|Completado|
+|Crear sistema de fichas en gamestore.js|Completado|
+|Logica de apuestas|Completado|
+|Implementación de objetos|Completado |
+|Implementación objeto Pistola|Completado|
+|Implementación objeto Comodín|Completado|
+|Implementación objeto Copa de vino|Completado|
+|Crear componente ScreenDisplay|Completado #Decidimos no hacerlo debido a que en GameView ya se cumplen esas funciones|
 
 
 
@@ -29,14 +29,15 @@
 
 
 
-|**Tarea**|**Estado** |
+|**Tarea** |**Estado**|
 |-|-|
 |Implementación objeto Puro, Jeringa y Encendedor|Pendiente|
+|Creación de Tienda de Objetos|Pendiente|
+|Test para funcionamiento de objetos|Pendiente|
+|Test para funcionamiento de mazo y calculo de puntajes|Pendiente|
 |Aplicar estilos según los mockups|Pendiente|
 |Animaciones para cartas y otros|Pendiente|
 |Sonidos y efectos|Pendiente|
-|Test para funcionamiento de objetos|Pendiente|
-|Test para funcionamiento de mazo y calculo de puntajes|Pendiente|
 
 
 
@@ -51,20 +52,6 @@
 |Completar README|Pendiente|
 |Pruebas de compatibilidad en navegadores|Pendiente|
 |Corrección de errores finales|Pendiente|
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
