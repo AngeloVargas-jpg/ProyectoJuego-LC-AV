@@ -1,85 +1,80 @@
 <template>
   <div class="viewport">
-    <div class="scene" ref="sceneRef" :style="sceneStyle">
-
-      <!-- ── FONDO ── -->
-      <img class="layer" src="@/assets/Images/bg-room.png" draggable="false" />
-
-      <!-- ── MONITORES (detrás de la mesa) ── -->
-      <img class="layer" src="@/assets/Images/monitors.png" draggable="false" />
-
-      <!-- ── PANTALLAS CRT — contenido sobre los monitores ── -->
+    <div class="scene" :style="sceneStyle">
+      <img class="layer" src="@/assets/Images/fondo.png" draggable="false" />
       <ScreenDisplay side="left" />
+      <ScreenDisplay side="bottom-left" />
+      <ScreenDisplay side="top-right" />
       <ScreenDisplay side="right" />
-      <!-- ── MESA ── -->
-      <img
-        class="layer layer--table"
-        src="@/assets/Images/table.png"
-        draggable="false"
-      />
-
-      <!-- ── JUEGO sobre la mesa ── -->
+      
       <GameTable />
-
     </div>
   </div>
 </template>
 
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { useGameStore } from '@/store/gameStore'
 import ScreenDisplay from '@/components/ScreenDisplay.vue'
 import GameTable from '@/components/GameTable.vue'
 
-// Dimensiones fijas del canvas de diseño
 const SCENE_W = 1360
 const SCENE_H = 704
 
-const sceneRef = ref(null)
-const scale = ref(1)
+const vpW = ref(0)
+const vpH = ref(0)
+const store = useGameStore()
 
-function updateScale() {
-  const scaleX = window.innerWidth  / SCENE_W
-  const scaleY = window.innerHeight / SCENE_H
-  // Usa el menor para que nunca se salga de la pantalla
-  scale.value = Math.min(scaleX, scaleY)
+function updateSize() {
+  // Usar 100vw/100vh reales sin scrollbar
+  vpW.value = window.visualViewport ? window.visualViewport.width : document.documentElement.clientWidth
+  vpH.value = window.visualViewport ? window.visualViewport.height : document.documentElement.clientHeight
 }
 
 onMounted(() => {
-  updateScale()
-  window.addEventListener('resize', updateScale)
+  updateSize()
+  window.addEventListener('resize', updateSize)
+  if (window.visualViewport) window.visualViewport.addEventListener('resize', updateSize)
+  store.startGame()
 })
 
 onUnmounted(() => {
-  window.removeEventListener('resize', updateScale)
+  window.removeEventListener('resize', updateSize)
+  if (window.visualViewport) window.visualViewport.removeEventListener('resize', updateSize)
 })
 
-const sceneStyle = computed(() => ({
-  transform: `scale(${scale.value})`,
-  transformOrigin: 'top left',
-  // Centra la escena en el viewport
-  left: `${(window.innerWidth  - SCENE_W * scale.value) / 2}px`,
-  top:  `${(window.innerHeight - SCENE_H * scale.value) / 2}px`,
-}))
+const scale = computed(() => {
+  if (!vpW.value || !vpH.value) return 1
+  return Math.min(vpW.value / SCENE_W, vpH.value / SCENE_H)
+})
+
+const sceneStyle = computed(() => {
+  const s = scale.value
+  const offsetX = (vpW.value - SCENE_W * s) / 2
+  const offsetY = (vpH.value - SCENE_H * s) / 2
+  return {
+    transform: `scale(${s})`,
+    transformOrigin: 'top left',
+    left: `${Math.max(0, offsetX)}px`,
+    top:  `${Math.max(0, offsetY)}px`,
+  }
+})
 </script>
 
 <style scoped>
-/* Viewport: ocupa toda la pantalla, fondo negro */
 .viewport {
-  width: 100vw;
-  height: 100vh;
+  position: fixed;
+  inset: 0;
   overflow: hidden;
   background: #000;
-  position: relative;
 }
 
-/* Scene: canvas fijo 1360x704, se escala como bloque */
 .scene {
   position: absolute;
   width: 1360px;
   height: 704px;
 }
 
-/* Todas las imágenes ocupan el 100% de la escena por defecto */
 .layer {
   position: absolute;
   top: 0;
@@ -89,15 +84,5 @@ const sceneStyle = computed(() => ({
   display: block;
   user-select: none;
   pointer-events: none;
-}
-
-/* Mesa: 722x346, centrada horizontalmente, apoyada abajo
-   left = (1360-722)/2 = 319px
-   top  = 704-346      = 358px               */
-.layer--table {
-  width: 722px;
-  height: 346px;
-  left: 319px;
-  top: 358px;
 }
 </style>

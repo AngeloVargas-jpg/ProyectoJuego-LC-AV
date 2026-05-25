@@ -9,6 +9,26 @@
       <div class="card__back-pattern"></div>
       <span class="card__hidden-mark">?</span>
     </template>
+    <template v-else-if="card.esFantasma">
+      <!-- Carta fantasma: imagen del asset + valor -->
+      <span class="card__corner card__corner--tl">{{ card.value }}</span>
+      <div class="card__ghost-center">
+        <img
+          v-if="card.suit === '🔫'"
+          src="@/assets/Images/revolver.png"
+          class="card__ghost-img"
+          alt="pistola"
+        />
+        <img
+          v-else-if="card.suit === '🃏'"
+          src="@/assets/Images/comodin.png"
+          class="card__ghost-img"
+          alt="comodín"
+        />
+        <span v-else class="card__ghost-suit">{{ card.suit }}</span>
+      </div>
+      <span class="card__corner card__corner--br">{{ card.value }}</span>
+    </template>
     <template v-else>
       <span class="card__corner card__corner--tl">{{ card.value }}<br>{{ card.suit }}</span>
       <span class="card__center">{{ card.suit }}</span>
@@ -16,20 +36,20 @@
     </template>
   </div>
 </template>
-
+ 
 <script setup>
 import { computed } from 'vue'
-
+ 
 const props = defineProps({
   card: { type: Object, required: true },
   dealer: { type: Boolean, default: false },
 })
-
+ 
 const isRed = computed(() =>
   ['♥', '♦'].includes(props.card.suit)
 )
 </script>
-
+ 
 <style scoped>
 .card {
   width: 72px;
@@ -52,7 +72,7 @@ const isRed = computed(() =>
   cursor: default;
   user-select: none;
 }
-
+ 
 .card:hover:not(.card--hidden) {
   transform: translateY(-8px) rotate(-1deg);
   box-shadow:
@@ -61,18 +81,15 @@ const isRed = computed(() =>
     inset 0 0 0 1px rgba(255,255,255,0.4);
   z-index: 10;
 }
-
-/* Carta del dealer: ligeramente rotada y más pequeña */
+ 
 .card--dealer {
   width: 60px;
   height: 88px;
   transform: rotate(calc(var(--r, 0) * 1deg));
 }
-
-/* Rojo para corazones y diamantes */
+ 
 .card--red { color: #cc0000; }
-
-/* Carta fantasma (pistola/comodín) */
+ 
 .card--ghost {
   background: #1a0a0a;
   color: #ff4040;
@@ -82,13 +99,12 @@ const isRed = computed(() =>
     4px 6px 10px rgba(0,0,0,0.8),
     0 0 12px rgba(180,20,20,0.4);
 }
-
-/* Carta oculta */
+ 
 .card--hidden {
   background: #1a0808;
   overflow: hidden;
 }
-
+ 
 .card__back-pattern {
   position: absolute;
   inset: 4px;
@@ -102,7 +118,7 @@ const isRed = computed(() =>
   border: 1px solid rgba(139,0,0,0.4);
   border-radius: 2px;
 }
-
+ 
 .card__hidden-mark {
   position: relative;
   z-index: 1;
@@ -110,8 +126,7 @@ const isRed = computed(() =>
   color: #8b0000;
   text-shadow: 0 0 10px rgba(180,20,20,0.8);
 }
-
-/* Esquinas top-left y bottom-right */
+ 
 .card__corner {
   position: absolute;
   font-size: 0.65rem;
@@ -119,17 +134,39 @@ const isRed = computed(() =>
   line-height: 1.1;
   text-align: center;
 }
-
+ 
 .card__corner--tl { top: 4px; left: 5px; }
 .card__corner--br {
   bottom: 4px;
   right: 5px;
   transform: rotate(180deg);
 }
-
-/* Símbolo central grande */
+ 
 .card__center {
   font-size: 1.8rem;
   line-height: 1;
+}
+ 
+/* ── Carta fantasma ── */
+.card__ghost-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+ 
+.card__ghost-img {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+  filter:
+    drop-shadow(0 0 6px rgba(255, 60, 0, 0.8))
+    brightness(0.85)
+    sepia(0.3);
+}
+ 
+.card__ghost-suit {
+  font-size: 1.4rem;
 }
 </style>
