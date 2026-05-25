@@ -26,7 +26,6 @@ export const useGameStore = defineStore('game', () => {
   const turnoNumero = ref(1)
   const dealerStood = ref(false)
  
-  // --- ESTADO: Objetos ---
   const objetos = {
     pistola: { balas: ref(1) },
     comoDin: { disponible: ref(0) },
@@ -34,8 +33,14 @@ export const useGameStore = defineStore('game', () => {
   }
   const ultimaCartaJugador = ref(null)
   const objetoMensaje = ref('')
+
+  // Precios tienda
+  const preciosTienda = {
+    pistola: 100,
+    comodin: 150,
+    copa: 75
+  }
  
-  // --- FUNCIONES AUXILIARES ---
   const createDeck = () => {
     const suits = ['♠', '♥', '♦', '♣']
     const values = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K']
@@ -79,10 +84,8 @@ export const useGameStore = defineStore('game', () => {
     return { ...card, hidden }
   }
  
-  // --- COMPUTED ---
   const dealerVisibleScore = computed(() => calcScore(dealerHand.value, false))
  
-  // --- ACCIONES ---
   const cobrarApuesta = () => {
     const pot = (apuestaJugador.value || 0) + (apuestaCrupier.value || 0)
     if (pot === 0) return
@@ -158,8 +161,6 @@ export const useGameStore = defineStore('game', () => {
     faseJuego.value = 'apuestas'
     dealerStood.value = false
 
-    // FIX: los objetos acumulados (balas, copa) persisten entre rondas.
-    // Solo se resetea el comodin porque es de uso unico por ronda.
     objetos.comoDin.disponible.value = 0
     ultimaCartaJugador.value = null
     objetoMensaje.value = ''
@@ -256,7 +257,6 @@ export const useGameStore = defineStore('game', () => {
       return
     }
  
-    // Probabilidades de obtener objetos por turno
     const mensajesObjetos = []
     if (Math.random() < 0.15) {
       objetos.pistola.balas.value++
@@ -292,8 +292,39 @@ export const useGameStore = defineStore('game', () => {
     }
     resolveGame()
   }
+
+  // ── TIENDA ──
+  const comprarObjeto = (objeto) => {
+    const precio = preciosTienda[objeto]
+    if (!precio) return { ok: false, mensaje: 'Objeto no reconocido.' }
+
+    if (dineroJugador.value < precio) {
+      return { ok: false, mensaje: `FONDOS INSUFICIENTES — Necesitas ${precio} $` }
+    }
+
+    if (objeto === 'comodin' && objetos.comoDin.disponible.value > 0) {
+      return { ok: false, mensaje: 'YA TIENES UN COMODIN DISPONIBLE' }
+    }
+
+    dineroJugador.value -= precio
+
+    if (objeto === 'pistola') {
+      objetos.pistola.balas.value++
+      return { ok: true, mensaje: `COMPRADO — +1 bala (${precio} $)` }
+    }
+    if (objeto === 'comodin') {
+      objetos.comoDin.disponible.value = 1
+      return { ok: true, mensaje: `COMPRADO — Comodin disponible (${precio} $)` }
+    }
+    if (objeto === 'copa') {
+      objetos.copa.cargas.value++
+      return { ok: true, mensaje: `COMPRADO — +1 carga de copa (${precio} $)` }
+    }
+
+    return { ok: false, mensaje: 'Error desconocido.' }
+  }
  
-  // --- ACCIONES: Objetos ---
+  // ── OBJETOS ──
   const usarPistola = (objetivo, efecto) => {
     if (faseJuego.value !== 'turnoJugador' || jugadorNego.value || objetos.pistola.balas.value <= 0) return
  
@@ -302,7 +333,6 @@ export const useGameStore = defineStore('game', () => {
     const efectoReal = acierta ? efecto : (efecto === 'sumar' ? 'restar' : 'sumar')
     const valorCarta = efectoReal === 'sumar' ? '+5' : '-5'
     const cartaFantasma = { value: valorCarta, suit: '🔫', hidden: false, esFantasma: true }
- 
     const accionTexto = efectoReal === 'sumar' ? 'sumo' : 'resto'
     const resultadoTexto = acierta ? 'ACERTO.' : 'FALLO. Efecto invertido.'
  
@@ -324,7 +354,6 @@ export const useGameStore = defineStore('game', () => {
     const valorAleatorio = Math.floor(Math.random() * 13) + 1
     const valorCarta = accion === 'sumar' ? `+${valorAleatorio}` : `-${valorAleatorio}`
     const cartaFantasma = { value: valorCarta, suit: '🃏', hidden: false, esFantasma: true }
- 
     playerHand.value.push(cartaFantasma)
     playerScore.value = calcScore(playerHand.value)
     objetoMensaje.value = `COMODIN — Te ${accion === 'sumar' ? 'sumo' : 'resto'} ${valorAleatorio} puntos.`
@@ -337,7 +366,6 @@ export const useGameStore = defineStore('game', () => {
       objetos.copa.cargas.value <= 0
     ) return
 
-    // FIX: usar ultimaCartaJugador si existe, si no la última carta no-fantasma de la mano
     const cartaObjetivo = ultimaCartaJugador.value
       ?? [...playerHand.value].reverse().find(c => !c.esFantasma)
       ?? null
@@ -354,41 +382,18 @@ export const useGameStore = defineStore('game', () => {
   }
  
   return {
-    deck,
-    playerHand,
-    dealerHand,
-    playerScore,
-    dealerScore,
-    gameOver,
-    winner,
-    message,
-    playerStood,
-    victoriasJugador,
-    victoriasCrupier,
-    dineroJugador,
-    dineroCrupier,
-    apuestaJugador,
-    apuestaCrupier,
-    apuestaMinima,
-    jugadorNego,
-    faseJuego,
-    turnoNumero,
-    dealerStood,
-    objetos,
-    ultimaCartaJugador,
-    objetoMensaje,
+    deck, playerHand, dealerHand, playerScore, dealerScore,
+    gameOver, winner, message, playerStood,
+    victoriasJugador, victoriasCrupier,
+    dineroJugador, dineroCrupier,
+    apuestaJugador, apuestaCrupier, apuestaMinima,
+    jugadorNego, faseJuego, turnoNumero, dealerStood,
+    objetos, ultimaCartaJugador, objetoMensaje,
     dealerVisibleScore,
-    startGame,
-    playerHit,
-    playerStand,
-    calcScore,
-    hacerApuesta,
-    negarApuesta,
-    cobrarApuesta,
-    turnoCrupier,
-    runDealerTurn,
-    usarPistola,
-    usarComodin,
-    usarCopa
+    startGame, playerHit, playerStand, calcScore,
+    hacerApuesta, negarApuesta, cobrarApuesta,
+    turnoCrupier, runDealerTurn,
+    usarPistola, usarComodin, usarCopa,
+    comprarObjeto, preciosTienda
   }
 })

@@ -21,7 +21,7 @@
   <div v-else-if="side === 'bottom-left'" class="screen screen--bottom-left">
     <div class="screen__scanlines"></div>
     <div class="screen__content screen__content--row">
-      <button class="screen__btn" @click="goToShop">▶ TIENDA</button>
+      <button class="screen__btn" @click="abrirTienda">▶ TIENDA</button>
       <span class="line line--data">{{ store.dineroJugador }} $</span>
     </div>
   </div>
@@ -30,7 +30,7 @@
   <div v-else-if="side === 'top-right'" class="screen screen--top-right">
     <div class="screen__scanlines"></div>
     <div class="screen__content screen__content--left-align">
-      <button class="screen__btn screen__btn--usar" @click="usarObjeto">▶ USAR OBJETOS</button>
+      <button class="screen__btn screen__btn--usar" @click="abrirObjetos">▶ USAR OBJETOS</button>
       <div class="divider"></div>
       <div class="obj-grid">
         <span class="line line--obj">PISTOLA: {{ store.objetos.pistola.balas.value }}</span>
@@ -58,21 +58,23 @@
     </div>
   </div>
 
-  <!-- ══ MODAL OBJETOS ══ -->
+  <!-- ══ MODALES ══ -->
   <ObjetosModal :visible="modalObjetos" @close="modalObjetos = false" />
+  <TiendaModal  :visible="modalTienda"  @close="modalTienda = false" />
 
 </template>
 
 <script setup>
 import { computed, ref } from 'vue'
 import { useGameStore } from '@/store/gameStore'
-import { useRouter } from 'vue-router'
 import ObjetosModal from '@/components/ObjetosModal.vue'
+import TiendaModal from '@/components/TiendaModal.vue'
 
 defineProps({ side: String })
 const store = useGameStore()
-const router = useRouter()
+
 const modalObjetos = ref(false)
+const modalTienda  = ref(false)
 
 const faseTexto = computed(() => {
   switch (store.faseJuego) {
@@ -84,8 +86,8 @@ const faseTexto = computed(() => {
   }
 })
 
-function goToShop() { router.push('/shop') }
-function usarObjeto() { modalObjetos.value = true }
+function abrirObjetos() { modalObjetos.value = true }
+function abrirTienda()  { modalTienda.value  = true }
 </script>
 
 <style scoped>
@@ -96,17 +98,15 @@ function usarObjeto() { modalObjetos.value = true }
   background: transparent;
 }
 
-/* Monitor izquierdo grande */
 .screen--left {
-  left: 190px;
+  left: 170px;
   top: 155px;
-  width: 210px;
-  height: 170px;
-  transform: rotate(2.0deg);
+  width: 250px;
+  height: 175px;
+  transform: rotate(2.3deg);
   transform-origin: left top;
 }
 
-/* Pantallita inferior izquierda */
 .screen--bottom-left {
   left: 210px;
   top: 403px;
@@ -116,7 +116,6 @@ function usarObjeto() { modalObjetos.value = true }
   transform-origin: left top;
 }
 
-/* Monitor superior derecho */
 .screen--top-right {
   left: 1045px;
   top: 18px;
@@ -126,7 +125,6 @@ function usarObjeto() { modalObjetos.value = true }
   transform-origin: left top;
 }
 
-/* Monitor derecho grande */
 .screen--right {
   left: 1070px;
   top: 170px;
@@ -136,7 +134,6 @@ function usarObjeto() { modalObjetos.value = true }
   transform-origin: left top;
 }
 
-/* ── Scanlines ── */
 .screen__scanlines {
   position: absolute;
   inset: 0;
@@ -151,7 +148,6 @@ function usarObjeto() { modalObjetos.value = true }
   z-index: 2;
 }
 
-/* ── Contenido ── */
 .screen__content {
   position: relative;
   z-index: 1;
@@ -179,7 +175,6 @@ function usarObjeto() { modalObjetos.value = true }
   gap: 2px;
 }
 
-/* ── Tipografía CRT ── */
 .line {
   margin: 0;
   font-family: 'Courier New', Courier, monospace;
@@ -190,14 +185,14 @@ function usarObjeto() { modalObjetos.value = true }
 }
 
 .line--title {
-  font-size: 0.82rem;
+  font-size: 0.70rem;
   color: #cc2200;
   text-shadow: 0 0 6px rgba(200,34,0,0.9);
   letter-spacing: 1px;
 }
 
 .line--score {
-  font-size: 1.1rem;
+  font-size: 0.80rem;
   color: #ff3300;
   text-shadow: 0 0 8px rgba(255,51,0,1), 0 0 20px rgba(255,51,0,0.5);
   letter-spacing: 3px;
@@ -236,7 +231,6 @@ function usarObjeto() { modalObjetos.value = true }
   font-size: 0.55rem;
   color: #cc3300;
   text-shadow: 0 0 4px rgba(200,51,0,0.7);
-  letter-spacing: 0px;
   text-align: left;
   white-space: nowrap;
 }
