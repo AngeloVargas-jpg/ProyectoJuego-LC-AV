@@ -1,0 +1,48 @@
+name: CI — Lint, Test y Build
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Descarga el código del repo
+      - name: Checkout código
+        uses: actions/checkout@v4
+
+      # 2. Instala Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      # 3. Instala pnpm
+      - name: Instala pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 8
+
+      # 4. Instala dependencias
+      - name: Instala dependencias
+        run: pnpm install
+
+      # 5. Linter — revisa errores de código
+      - name: ESLint
+        run: pnpm eslint src --ext .js,.vue
+
+      # 6. Formatter — verifica formato
+      - name: Prettier
+        run: pnpm prettier --check src
+
+      # 7. Tests — corre los tests
+      - name: Tests
+        run: pnpm vitest run
+
+      # 8. Build — verifica que compila sin errores
+      - name: Build
+        run: pnpm build

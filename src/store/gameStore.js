@@ -1,7 +1,7 @@
 // src/store/gameStore.js
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
- 
+
 export const useGameStore = defineStore('game', () => {
   const deck = ref([])
   const playerHand = ref([])
@@ -12,10 +12,10 @@ export const useGameStore = defineStore('game', () => {
   const winner = ref(null)
   const message = ref('')
   const playerStood = ref(false)
- 
+
   const victoriasJugador = ref(0)
   const victoriasCrupier = ref(0)
- 
+
   const dineroJugador = ref(1000)
   const dineroCrupier = ref(1000)
   const apuestaJugador = ref(0)
@@ -25,11 +25,11 @@ export const useGameStore = defineStore('game', () => {
   const faseJuego = ref('apuestas')
   const turnoNumero = ref(1)
   const dealerStood = ref(false)
- 
+
   const objetos = {
     pistola: { balas: ref(1) },
     comoDin: { disponible: ref(0) },
-    copa: { cargas: ref(0) }
+    copa: { cargas: ref(0) },
   }
   const ultimaCartaJugador = ref(null)
   const objetoMensaje = ref('')
@@ -38,9 +38,9 @@ export const useGameStore = defineStore('game', () => {
   const preciosTienda = {
     pistola: 100,
     comodin: 150,
-    copa: 75
+    copa: 75,
   }
- 
+
   const createDeck = () => {
     const suits = ['♠', '♥', '♦', '♣']
     const values = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K']
@@ -56,11 +56,11 @@ export const useGameStore = defineStore('game', () => {
     }
     return newDeck
   }
- 
+
   const calcScore = (hand, countHidden = true) => {
     let score = 0
     let aces = 0
-    const cardsToScore = countHidden ? hand : hand.filter(c => !c.hidden)
+    const cardsToScore = countHidden ? hand : hand.filter((c) => !c.hidden)
     for (const card of cardsToScore) {
       if (card.value === 'A') {
         aces += 1
@@ -77,15 +77,15 @@ export const useGameStore = defineStore('game', () => {
     }
     return score
   }
- 
+
   const drawCard = (hidden = false) => {
     if (!deck.value || deck.value.length === 0) return null
     const card = deck.value.pop()
     return { ...card, hidden }
   }
- 
+
   const dealerVisibleScore = computed(() => calcScore(dealerHand.value, false))
- 
+
   const cobrarApuesta = () => {
     const pot = (apuestaJugador.value || 0) + (apuestaCrupier.value || 0)
     if (pot === 0) return
@@ -100,31 +100,34 @@ export const useGameStore = defineStore('game', () => {
     apuestaJugador.value = 0
     apuestaCrupier.value = 0
   }
- 
+
   const endGame = (gameWinner, gameMessage) => {
     winner.value = gameWinner
     cobrarApuesta()
     gameOver.value = true
     message.value = gameMessage
     faseJuego.value = 'resultado'
-    dealerHand.value.forEach(card => (card.hidden = false))
+    dealerHand.value.forEach((card) => (card.hidden = false))
     playerScore.value = calcScore(playerHand.value)
     dealerScore.value = calcScore(dealerHand.value)
     if (gameWinner === 'player') victoriasJugador.value++
     if (gameWinner === 'dealer') victoriasCrupier.value++
   }
- 
+
   const resolveGame = () => {
     const pScore = calcScore(playerHand.value)
     const dScore = calcScore(dealerHand.value)
     const pPaso = pScore > 21
     const dPaso = dScore > 21
- 
+
     if (pPaso && dPaso) {
       if (pScore < dScore) {
         endGame('player', `Ambos se pasaron. Tu ${pScore} esta mas cerca de 21. Ganaste.`)
       } else if (dScore < pScore) {
-        endGame('dealer', `Ambos se pasaron. El crupier (${dScore}) esta mas cerca. Gana el crupier.`)
+        endGame(
+          'dealer',
+          `Ambos se pasaron. El crupier (${dScore}) esta mas cerca. Gana el crupier.`
+        )
       } else {
         endGame('tie', `Ambos se pasaron con ${pScore}. Empate.`)
       }
@@ -142,7 +145,7 @@ export const useGameStore = defineStore('game', () => {
       }
     }
   }
- 
+
   const startGame = () => {
     deck.value = createDeck()
     playerHand.value = []
@@ -153,7 +156,7 @@ export const useGameStore = defineStore('game', () => {
     winner.value = null
     message.value = ''
     playerStood.value = false
- 
+
     jugadorNego.value = false
     apuestaJugador.value = 0
     apuestaCrupier.value = 0
@@ -164,22 +167,22 @@ export const useGameStore = defineStore('game', () => {
     objetos.comoDin.disponible.value = 0
     ultimaCartaJugador.value = null
     objetoMensaje.value = ''
- 
+
     const c1 = drawCard()
     const c2 = drawCard()
     if (c1) playerHand.value.push(c1)
     if (c2) playerHand.value.push(c2)
- 
+
     const d1 = drawCard()
     const d2 = drawCard(true)
     if (d1) dealerHand.value.push(d1)
     if (d2) dealerHand.value.push(d2)
- 
+
     playerScore.value = calcScore(playerHand.value)
     dealerScore.value = calcScore(dealerHand.value, false)
   }
- 
-  const hacerApuesta = cantidad => {
+
+  const hacerApuesta = (cantidad) => {
     if (faseJuego.value !== 'apuestas') {
       message.value = 'No puedes apostar en este momento.'
       return
@@ -204,7 +207,7 @@ export const useGameStore = defineStore('game', () => {
     message.value = `Apostaste ${cantidad}. Pozo total: ${apuestaJugador.value + apuestaCrupier.value} $`
     faseJuego.value = 'turnoJugador'
   }
- 
+
   const negarApuesta = () => {
     if (faseJuego.value !== 'apuestas') {
       message.value = 'No puedes negar la apuesta ahora.'
@@ -214,7 +217,7 @@ export const useGameStore = defineStore('game', () => {
     message.value = 'Has negado la apuesta este turno. Objetos bloqueados.'
     faseJuego.value = 'turnoJugador'
   }
- 
+
   const playerHit = () => {
     if (gameOver.value || faseJuego.value !== 'turnoJugador') return
     const c = drawCard()
@@ -226,17 +229,17 @@ export const useGameStore = defineStore('game', () => {
     faseJuego.value = 'turnoCrupier'
     turnoCrupier()
   }
- 
+
   const playerStand = () => {
     if (gameOver.value || faseJuego.value !== 'turnoJugador') return
     playerStood.value = true
     faseJuego.value = 'turnoCrupier'
     turnoCrupier()
   }
- 
+
   const turnoCrupier = () => {
     const puntajeCrupierReal = calcScore(dealerHand.value, true)
- 
+
     if (puntajeCrupierReal < 17) {
       const c = drawCard()
       if (c) dealerHand.value.push(c)
@@ -246,27 +249,27 @@ export const useGameStore = defineStore('game', () => {
       dealerStood.value = true
       message.value = 'El crupier se planta.'
     }
- 
+
     playerScore.value = calcScore(playerHand.value)
     dealerScore.value = calcScore(dealerHand.value, false)
     turnoNumero.value += 1
- 
+
     if (playerStood.value && dealerStood.value) {
-      dealerHand.value.forEach(card => (card.hidden = false))
+      dealerHand.value.forEach((card) => (card.hidden = false))
       resolveGame()
       return
     }
- 
+
     const mensajesObjetos = []
     if (Math.random() < 0.15) {
       objetos.pistola.balas.value++
       mensajesObjetos.push('+1 bala')
     }
-    if (Math.random() < 0.20 && objetos.comoDin.disponible.value === 0) {
+    if (Math.random() < 0.2 && objetos.comoDin.disponible.value === 0) {
       objetos.comoDin.disponible.value = 1
       mensajesObjetos.push('Comodin disponible')
     }
-    if (Math.random() < 0.20) {
+    if (Math.random() < 0.2) {
       objetos.copa.cargas.value++
       mensajesObjetos.push('+1 carga de copa')
     }
@@ -276,15 +279,15 @@ export const useGameStore = defineStore('game', () => {
     } else {
       objetoMensaje.value = ''
     }
- 
+
     playerStood.value = false
     dealerStood.value = false
     jugadorNego.value = false
     faseJuego.value = 'apuestas'
   }
- 
+
   const runDealerTurn = () => {
-    dealerHand.value.forEach(card => (card.hidden = false))
+    dealerHand.value.forEach((card) => (card.hidden = false))
     while (calcScore(dealerHand.value) < 17) {
       const c = drawCard()
       if (!c) break
@@ -323,19 +326,20 @@ export const useGameStore = defineStore('game', () => {
 
     return { ok: false, mensaje: 'Error desconocido.' }
   }
- 
+
   // ── OBJETOS ──
   const usarPistola = (objetivo, efecto) => {
-    if (faseJuego.value !== 'turnoJugador' || jugadorNego.value || objetos.pistola.balas.value <= 0) return
- 
+    if (faseJuego.value !== 'turnoJugador' || jugadorNego.value || objetos.pistola.balas.value <= 0)
+      return
+
     objetos.pistola.balas.value--
     const acierta = Math.random() >= 0.5
-    const efectoReal = acierta ? efecto : (efecto === 'sumar' ? 'restar' : 'sumar')
+    const efectoReal = acierta ? efecto : efecto === 'sumar' ? 'restar' : 'sumar'
     const valorCarta = efectoReal === 'sumar' ? '+5' : '-5'
     const cartaFantasma = { value: valorCarta, suit: '🔫', hidden: false, esFantasma: true }
     const accionTexto = efectoReal === 'sumar' ? 'sumo' : 'resto'
     const resultadoTexto = acierta ? 'ACERTO.' : 'FALLO. Efecto invertido.'
- 
+
     if (objetivo === 'jugador') {
       playerHand.value.push(cartaFantasma)
       playerScore.value = calcScore(playerHand.value)
@@ -346,10 +350,15 @@ export const useGameStore = defineStore('game', () => {
       objetoMensaje.value = `PISTOLA — ${resultadoTexto} Le ${accionTexto} 5 puntos al crupier.`
     }
   }
- 
+
   const usarComodin = (accion) => {
-    if (faseJuego.value !== 'turnoJugador' || jugadorNego.value || objetos.comoDin.disponible.value <= 0) return
- 
+    if (
+      faseJuego.value !== 'turnoJugador' ||
+      jugadorNego.value ||
+      objetos.comoDin.disponible.value <= 0
+    )
+      return
+
     objetos.comoDin.disponible.value = 0
     const valorAleatorio = Math.floor(Math.random() * 13) + 1
     const valorCarta = accion === 'sumar' ? `+${valorAleatorio}` : `-${valorAleatorio}`
@@ -358,42 +367,63 @@ export const useGameStore = defineStore('game', () => {
     playerScore.value = calcScore(playerHand.value)
     objetoMensaje.value = `COMODIN — Te ${accion === 'sumar' ? 'sumo' : 'resto'} ${valorAleatorio} puntos.`
   }
- 
-  const usarCopa = () => {
-    if (
-      faseJuego.value !== 'turnoJugador' ||
-      jugadorNego.value ||
-      objetos.copa.cargas.value <= 0
-    ) return
 
-    const cartaObjetivo = ultimaCartaJugador.value
-      ?? [...playerHand.value].reverse().find(c => !c.esFantasma)
-      ?? null
+  const usarCopa = () => {
+    if (faseJuego.value !== 'turnoJugador' || jugadorNego.value || objetos.copa.cargas.value <= 0)
+      return
+
+    const cartaObjetivo =
+      ultimaCartaJugador.value ?? [...playerHand.value].reverse().find((c) => !c.esFantasma) ?? null
 
     if (!cartaObjetivo) return
 
     objetos.copa.cargas.value--
-    const index = playerHand.value.findIndex(card => card === cartaObjetivo)
+    const index = playerHand.value.findIndex((card) => card === cartaObjetivo)
     if (index !== -1) playerHand.value.splice(index, 1)
     deck.value.push(cartaObjetivo)
     playerScore.value = calcScore(playerHand.value)
     ultimaCartaJugador.value = null
     objetoMensaje.value = 'COPA — La ultima carta regreso al mazo.'
   }
- 
+
   return {
-    deck, playerHand, dealerHand, playerScore, dealerScore,
-    gameOver, winner, message, playerStood,
-    victoriasJugador, victoriasCrupier,
-    dineroJugador, dineroCrupier,
-    apuestaJugador, apuestaCrupier, apuestaMinima,
-    jugadorNego, faseJuego, turnoNumero, dealerStood,
-    objetos, ultimaCartaJugador, objetoMensaje,
+    deck,
+    playerHand,
+    dealerHand,
+    playerScore,
+    dealerScore,
+    gameOver,
+    winner,
+    message,
+    playerStood,
+    victoriasJugador,
+    victoriasCrupier,
+    dineroJugador,
+    dineroCrupier,
+    apuestaJugador,
+    apuestaCrupier,
+    apuestaMinima,
+    jugadorNego,
+    faseJuego,
+    turnoNumero,
+    dealerStood,
+    objetos,
+    ultimaCartaJugador,
+    objetoMensaje,
     dealerVisibleScore,
-    startGame, playerHit, playerStand, calcScore,
-    hacerApuesta, negarApuesta, cobrarApuesta,
-    turnoCrupier, runDealerTurn,
-    usarPistola, usarComodin, usarCopa,
-    comprarObjeto, preciosTienda
+    startGame,
+    playerHit,
+    playerStand,
+    calcScore,
+    hacerApuesta,
+    negarApuesta,
+    cobrarApuesta,
+    turnoCrupier,
+    runDealerTurn,
+    usarPistola,
+    usarComodin,
+    usarCopa,
+    comprarObjeto,
+    preciosTienda,
   }
 })
