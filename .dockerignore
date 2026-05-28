@@ -1,0 +1,21 @@
+# Dependencias
+node_modules
+
+# Build local
+dist
+
+# Git
+.git
+.gitignore
+
+# CI/CD
+.github
+
+# Docs y tests (no van a la imagen)
+Docs
+Test
+
+# Variables de entorno locales
+.env
+.env.*
+!.env.example
