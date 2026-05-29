@@ -1,13 +1,5 @@
 <template>
-  <div
-    class="card"
-    :class="[
-      { 'card--hidden': card.hidden },
-      { 'card--red': isRed },
-      { 'card--ghost': card.esFantasma },
-      { 'card--dealer': dealer },
-    ]"
-  >
+  <div class="card" :class="[{ 'card--hidden': card.hidden }, { 'card--red': isRed }, { 'card--ghost': card.esFantasma }, { 'card--dealer': dealer }]">
     <template v-if="card.hidden">
       <div class="card__back-pattern"></div>
       <span class="card__hidden-mark">?</span>
@@ -16,18 +8,8 @@
       <!-- Carta fantasma: imagen del asset + valor -->
       <span class="card__corner card__corner--tl">{{ card.value }}</span>
       <div class="card__ghost-center">
-        <img
-          v-if="card.suit === '🔫'"
-          src="@/assets/Images/revolver.png"
-          class="card__ghost-img"
-          alt="pistola"
-        />
-        <img
-          v-else-if="card.suit === '🃏'"
-          src="@/assets/Images/comodin.png"
-          class="card__ghost-img"
-          alt="comodín"
-        />
+        <img v-if="card.suit === '🔫'" src="@/assets/Images/revolver.png" class="card__ghost-img" alt="pistola" />
+        <img v-else-if="card.suit === '🃏'" src="@/assets/Images/comodin.png" class="card__ghost-img" alt="comodín" />
         <span v-else class="card__ghost-suit">{{ card.suit }}</span>
       </div>
       <span class="card__corner card__corner--br">{{ card.value }}</span>

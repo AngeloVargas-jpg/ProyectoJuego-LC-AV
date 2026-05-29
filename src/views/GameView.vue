@@ -27,12 +27,8 @@
 
   function updateSize() {
     // Usar 100vw/100vh reales sin scrollbar
-    vpW.value = window.visualViewport
-      ? window.visualViewport.width
-      : document.documentElement.clientWidth
-    vpH.value = window.visualViewport
-      ? window.visualViewport.height
-      : document.documentElement.clientHeight
+    vpW.value = window.visualViewport ? window.visualViewport.width : document.documentElement.clientWidth
+    vpH.value = window.visualViewport ? window.visualViewport.height : document.documentElement.clientHeight
   }
 
   onMounted(() => {

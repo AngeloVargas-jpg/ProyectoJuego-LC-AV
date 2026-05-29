@@ -2,79 +2,27 @@
   <div class="ui">
     <!-- ══ FASE: APUESTAS ══ -->
     <div v-if="store.faseJuego === 'apuestas'" class="ui__panel ui__panel--bet">
-      <span class="ui__label">
-        TURNO_{{ String(store.turnoNumero).padStart(2, '0') }} // APUESTA
-      </span>
+      <span class="ui__label"> TURNO_{{ String(store.turnoNumero).padStart(2, '0') }} // APUESTA </span>
 
       <div class="ui__bet-row">
-        <button
-          class="ui__chip"
-          @click="playClick(); setPreset(50)"
-        >
-          50
-        </button>
-        <button
-          class="ui__chip"
-          @click="playClick(); setPreset(100)"
-        >
-          100
-        </button>
-        <button
-          class="ui__chip"
-          @click="playClick(); setPreset(200)"
-        >
-          200
-        </button>
+        <button class="ui__chip" @click="onChip50">50</button>
+        <button class="ui__chip" @click="onChip100">100</button>
+        <button class="ui__chip" @click="onChip200">200</button>
 
-        <input
-          v-model.number="betAmount"
-          type="number"
-          :min="store.apuestaMinima"
-          :max="store.dineroJugador"
-          class="ui__input"
-        />
+        <input v-model.number="betAmount" type="number" :min="store.apuestaMinima" :max="store.dineroJugador" class="ui__input" />
 
-        <button
-          class="ui__btn ui__btn--bet"
-          :disabled="!canBet"
-          @click="playClick(); placeBet()"
-        >
-          ▶ APOSTAR
-        </button>
-
-        <button
-          class="ui__btn ui__btn--deny"
-          @click="playClick(); store.negarApuesta()"
-        >
-          ✕ NEGAR
-        </button>
+        <button class="ui__btn ui__btn--bet" :disabled="!canBet" @click="onApostar">▶ APOSTAR</button>
+        <button class="ui__btn ui__btn--deny" @click="onNegar">✕ NEGAR</button>
       </div>
 
-      <span v-if="!canBet && betAmount < store.apuestaMinima" class="ui__hint">
-        MÍN: {{ store.apuestaMinima }} $
-      </span>
-
+      <span v-if="!canBet && betAmount < store.apuestaMinima" class="ui__hint"> MÍN: {{ store.apuestaMinima }} $ </span>
       <span v-else-if="!canBet" class="ui__hint"> FONDOS INSUFICIENTES </span>
     </div>
 
     <!-- ══ TURNO JUGADOR ══ -->
     <div v-else-if="store.faseJuego === 'turnoJugador'" class="ui__panel ui__panel--turn">
-      <button
-        class="ui__btn ui__btn--hit"
-        :disabled="store.gameOver"
-        @click="playClick(); store.playerHit()"
-      >
-        ▶ PEDIR CARTA
-      </button>
-
-      <button
-        class="ui__btn ui__btn--stand"
-        :disabled="store.gameOver"
-        @click="playClick(); store.playerStand()"
-      >
-        ■ PLANTARSE
-      </button>
-
+      <button class="ui__btn ui__btn--hit" :disabled="store.gameOver" @click="onHit">▶ PEDIR CARTA</button>
+      <button class="ui__btn ui__btn--stand" :disabled="store.gameOver" @click="onStand">■ PLANTARSE</button>
       <span v-if="store.jugadorNego" class="ui__warn"> ⚠ OBJETOS BLOQUEADOS </span>
     </div>
 
@@ -84,33 +32,16 @@
     </div>
 
     <!-- ══ RESULTADO ══ -->
-    <div
-      v-else-if="store.faseJuego === 'resultado' || store.gameOver"
-      class="ui__panel ui__panel--result"
-    >
-      <span class="ui__result-msg">
-        {{ store.message }}
-      </span>
-
-      <button
-        class="ui__btn ui__btn--restart"
-        @click="playClick(); store.startGame()"
-      >
-        ↺ NUEVA PARTIDA
-      </button>
+    <div v-else-if="store.faseJuego === 'resultado' || store.gameOver" class="ui__panel ui__panel--result">
+      <span class="ui__result-msg">{{ store.message }}</span>
+      <button class="ui__btn ui__btn--restart" @click="onRestart">↺ NUEVA PARTIDA</button>
     </div>
 
     <!-- HUD -->
     <div class="ui__hud">
       <span class="ui__hud-item"> 💰 {{ store.dineroJugador }} $ </span>
-
-      <span v-if="store.apuestaJugador > 0" class="ui__hud-item ui__hud-item--bet">
-        BET: {{ store.apuestaJugador }} $
-      </span>
-
-      <span class="ui__hud-item ui__hud-item--wins">
-        W: {{ store.victoriasJugador }} / L: {{ store.victoriasCrupier }}
-      </span>
+      <span v-if="store.apuestaJugador > 0" class="ui__hud-item ui__hud-item--bet"> BET: {{ store.apuestaJugador }} $ </span>
+      <span class="ui__hud-item ui__hud-item--wins"> W: {{ store.victoriasJugador }} / L: {{ store.victoriasCrupier }} </span>
     </div>
   </div>
 </template>
@@ -122,26 +53,7 @@
   const store = useGameStore()
   const betAmount = ref(store.apuestaMinima || 50)
 
-  function playClick() {
-  try {
-    const AC = window.AudioContext ?? window.webkitAudioContext
-    if (!AC) return
-    const ctx = new AC()
-    const osc = ctx.createOscillator()
-    const gain = ctx.createGain()
-    osc.type = 'square'
-    osc.frequency.value = 700
-    gain.gain.setValueAtTime(0.02, ctx.currentTime)
-    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.04)
-    osc.connect(gain)
-    gain.connect(ctx.destination)
-    osc.start()
-    osc.stop(ctx.currentTime + 0.04)
-  } catch (e) {}
-}
-  const canBet = computed(
-    () => betAmount.value >= store.apuestaMinima && betAmount.value <= store.dineroJugador
-  )
+  const canBet = computed(() => betAmount.value >= store.apuestaMinima && betAmount.value <= store.dineroJugador)
 
   function setPreset(n) {
     betAmount.value = n
@@ -150,6 +62,38 @@
   function placeBet() {
     if (!canBet.value) return
     store.hacerApuesta(betAmount.value)
+  }
+
+  function onChip50() {
+    setPreset(50)
+  }
+
+  function onChip100() {
+    setPreset(100)
+  }
+
+  function onChip200() {
+    setPreset(200)
+  }
+
+  function onApostar() {
+    placeBet()
+  }
+
+  function onNegar() {
+    store.negarApuesta()
+  }
+
+  function onHit() {
+    store.playerHit()
+  }
+
+  function onStand() {
+    store.playerStand()
+  }
+
+  function onRestart() {
+    store.startGame()
   }
 
   onMounted(() => {
@@ -171,7 +115,6 @@
     box-shadow: 0 -6px 20px rgba(0, 0, 0, 0.7);
   }
 
-  /* Panel base */
   .ui__panel {
     display: flex;
     flex-wrap: wrap;
@@ -180,7 +123,6 @@
     justify-content: center;
   }
 
-  /* Etiqueta de estado */
   .ui__label {
     width: 100%;
     text-align: center;
@@ -198,7 +140,6 @@
     text-shadow: 0 0 10px rgba(255, 48, 48, 0.9);
   }
 
-  /* Fila de apuesta */
   .ui__bet-row {
     display: flex;
     align-items: center;
@@ -207,7 +148,6 @@
     justify-content: center;
   }
 
-  /* Fichas preset */
   .ui__chip {
     width: 44px;
     height: 44px;
@@ -233,7 +173,6 @@
       0 0 10px rgba(212, 130, 10, 0.4);
   }
 
-  /* Input apuesta */
   .ui__input {
     width: 80px;
     padding: 8px;
@@ -247,9 +186,11 @@
     outline: none;
     box-shadow: inset 0 0 10px rgba(139, 0, 0, 0.3);
   }
+
   .ui__input::-webkit-inner-spin-button {
     -webkit-appearance: none;
   }
+
   .ui__input:focus {
     border-color: #cc1111;
     box-shadow:
@@ -257,7 +198,6 @@
       0 0 8px rgba(204, 17, 17, 0.5);
   }
 
-  /* Botones acción */
   .ui__btn {
     font-family: 'Share Tech Mono', monospace;
     font-size: 0.78rem;
@@ -274,6 +214,7 @@
     opacity: 0.3;
     cursor: not-allowed;
   }
+
   .ui__btn:active:not(:disabled) {
     transform: translateY(1px);
   }
@@ -286,6 +227,7 @@
     box-shadow: 0 0 10px rgba(180, 20, 20, 0.5);
     text-shadow: 0 0 6px rgba(255, 100, 100, 0.8);
   }
+
   .ui__btn--bet:hover:not(:disabled),
   .ui__btn--hit:hover:not(:disabled) {
     background: #cc1111;
@@ -298,6 +240,7 @@
     border: 1px solid #7a4a05;
     box-shadow: 0 0 8px rgba(212, 130, 10, 0.3);
   }
+
   .ui__btn--stand:hover:not(:disabled) {
     background: rgba(60, 35, 8, 0.9);
     box-shadow: 0 0 14px rgba(212, 130, 10, 0.5);
@@ -308,6 +251,7 @@
     color: #6b5a45;
     border: 1px solid #3d2810;
   }
+
   .ui__btn--deny:hover {
     color: #c8b49a;
     border-color: #5c3317;
@@ -320,11 +264,11 @@
     box-shadow: 0 0 10px rgba(77, 255, 77, 0.3);
     text-shadow: 0 0 8px rgba(77, 255, 77, 0.8);
   }
+
   .ui__btn--restart:hover {
     box-shadow: 0 0 20px rgba(77, 255, 77, 0.5);
   }
 
-  /* Hints */
   .ui__hint {
     font-family: 'Share Tech Mono', monospace;
     font-size: 0.68rem;
@@ -341,7 +285,6 @@
     animation: flicker 2s infinite;
   }
 
-  /* Mensaje resultado */
   .ui__result-msg {
     font-family: 'Share Tech Mono', monospace;
     font-size: 0.85rem;
@@ -353,7 +296,6 @@
     animation: flicker 3s infinite;
   }
 
-  /* HUD: fichas siempre visibles */
   .ui__hud {
     display: flex;
     justify-content: center;
@@ -392,5 +334,3 @@
     }
   }
 </style>
-
-

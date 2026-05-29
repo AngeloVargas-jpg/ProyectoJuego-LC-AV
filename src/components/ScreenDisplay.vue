@@ -51,9 +51,7 @@
       <div class="divider"></div>
       <p class="line line--label">PUNTAJES</p>
       <p class="line line--data">CRUPIER: {{ store.dealerVisibleScore }}</p>
-      <p class="line line--data" :class="{ 'line--bust': store.playerScore > 21 }">
-        TU: {{ store.playerScore }}
-      </p>
+      <p class="line line--data" :class="{ 'line--bust': store.playerScore > 21 }">TU: {{ store.playerScore }}</p>
     </div>
   </div>
 
@@ -149,13 +147,7 @@
   .screen__scanlines {
     position: absolute;
     inset: 0;
-    background: repeating-linear-gradient(
-      0deg,
-      transparent,
-      transparent 2px,
-      rgba(0, 0, 0, 0.12) 2px,
-      rgba(0, 0, 0, 0.12) 4px
-    );
+    background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 0, 0, 0.12) 2px, rgba(0, 0, 0, 0.12) 4px);
     pointer-events: none;
     z-index: 2;
   }

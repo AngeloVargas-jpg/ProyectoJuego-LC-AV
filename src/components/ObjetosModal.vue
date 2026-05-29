@@ -14,9 +14,7 @@
             <p v-if="store.objetoMensaje" class="modal-mensaje">{{ store.objetoMensaje }}</p>
           </Transition>
 
-          <p v-if="store.jugadorNego" class="modal-bloqueado">
-            ⚠ OBJETOS BLOQUEADOS — APUESTA NEGADA
-          </p>
+          <p v-if="store.jugadorNego" class="modal-bloqueado">⚠ OBJETOS BLOQUEADOS — APUESTA NEGADA</p>
 
           <!-- Objetos base -->
           <p class="seccion-titulo">— OBJETOS ESTÁNDAR —</p>
@@ -40,45 +38,15 @@
                 <div v-if="objetoActivo === 'pistola'" class="submenu" @click.stop>
                   <p class="submenu-titulo">OBJETIVO</p>
                   <div class="submenu-fila">
-                    <button
-                      class="submenu-btn"
-                      :class="{ 'submenu-btn--sel': pistola.objetivo === 'jugador' }"
-                      @click="pistola.objetivo = 'jugador'"
-                    >
-                      YO
-                    </button>
-                    <button
-                      class="submenu-btn"
-                      :class="{ 'submenu-btn--sel': pistola.objetivo === 'crupier' }"
-                      @click="pistola.objetivo = 'crupier'"
-                    >
-                      CRUPIER
-                    </button>
+                    <button class="submenu-btn" :class="{ 'submenu-btn--sel': pistola.objetivo === 'jugador' }" @click="pistola.objetivo = 'jugador'">YO</button>
+                    <button class="submenu-btn" :class="{ 'submenu-btn--sel': pistola.objetivo === 'crupier' }" @click="pistola.objetivo = 'crupier'">CRUPIER</button>
                   </div>
                   <p class="submenu-titulo">EFECTO</p>
                   <div class="submenu-fila">
-                    <button
-                      class="submenu-btn"
-                      :class="{ 'submenu-btn--sel': pistola.efecto === 'sumar' }"
-                      @click="pistola.efecto = 'sumar'"
-                    >
-                      +5
-                    </button>
-                    <button
-                      class="submenu-btn"
-                      :class="{ 'submenu-btn--sel': pistola.efecto === 'restar' }"
-                      @click="pistola.efecto = 'restar'"
-                    >
-                      -5
-                    </button>
+                    <button class="submenu-btn" :class="{ 'submenu-btn--sel': pistola.efecto === 'sumar' }" @click="pistola.efecto = 'sumar'">+5</button>
+                    <button class="submenu-btn" :class="{ 'submenu-btn--sel': pistola.efecto === 'restar' }" @click="pistola.efecto = 'restar'">-5</button>
                   </div>
-                  <button
-                    class="submenu-confirmar"
-                    :disabled="!pistola.objetivo || !pistola.efecto"
-                    @click="confirmarPistola"
-                  >
-                    ▶ DISPARAR
-                  </button>
+                  <button class="submenu-confirmar" :disabled="!pistola.objetivo || !pistola.efecto" @click="confirmarPistola">▶ DISPARAR</button>
                 </div>
               </Transition>
             </div>
@@ -102,18 +70,8 @@
                 <div v-if="objetoActivo === 'comodin'" class="submenu" @click.stop>
                   <p class="submenu-titulo">ELIGE ACCIÓN</p>
                   <div class="submenu-fila">
-                    <button
-                      class="submenu-btn submenu-btn--confirmar"
-                      @click="confirmarComodin('sumar')"
-                    >
-                      ▶ SUMAR
-                    </button>
-                    <button
-                      class="submenu-btn submenu-btn--confirmar"
-                      @click="confirmarComodin('restar')"
-                    >
-                      ▶ RESTAR
-                    </button>
+                    <button class="submenu-btn submenu-btn--confirmar" @click="confirmarComodin('sumar')">▶ SUMAR</button>
+                    <button class="submenu-btn submenu-btn--confirmar" @click="confirmarComodin('restar')">▶ RESTAR</button>
                   </div>
                 </div>
               </Transition>
@@ -141,9 +99,7 @@
           <!-- Objetos premium -->
           <div class="premium-header">
             <p class="seccion-titulo">— OBJETOS PREMIUM —</p>
-            <span class="premium-lock-hint">
-              🔒 Desbloquea cada uno en la Tienda por {{ store.PRECIO_DESBLOQUEO }} $
-            </span>
+            <span class="premium-lock-hint"> 🔒 Desbloquea cada uno en la Tienda por {{ store.PRECIO_DESBLOQUEO }} $ </span>
           </div>
 
           <div class="objetos-grid">
@@ -158,21 +114,14 @@
               @click="confirmarJeringa"
             >
               <div class="objeto-img-wrap">
-                <img
-                  src="@/assets/Images/jeringa.png"
-                  class="objeto-img"
-                  :class="{ 'objeto-img--bloqueado': !store.jeringaDesbloqueada }"
-                  alt="Jeringa"
-                />
+                <img src="@/assets/Images/jeringa.png" class="objeto-img" :class="{ 'objeto-img--bloqueado': !store.jeringaDesbloqueada }" alt="Jeringa" />
               </div>
               <p class="objeto-nombre">JERINGA</p>
               <p class="objeto-cargas" :class="{ 'objeto-lock': !store.jeringaDesbloqueada }">
                 <span v-if="!store.jeringaDesbloqueada">🔒</span>
                 <span v-else>CARGAS: {{ store.objetos.jeringa.cargas }}</span>
               </p>
-              <p v-if="store.jeringaDesbloqueada" class="objeto-efecto-desc">
-                Congela al crupier 1 turno
-              </p>
+              <p v-if="store.jeringaDesbloqueada" class="objeto-efecto-desc">Congela al crupier 1 turno</p>
             </div>
 
             <!-- ENCENDEDOR -->
@@ -186,21 +135,14 @@
               @click="confirmarEncendedor"
             >
               <div class="objeto-img-wrap">
-                <img
-                  src="@/assets/Images/encendedor.png"
-                  class="objeto-img"
-                  :class="{ 'objeto-img--bloqueado': !store.encendedorDesbloqueado }"
-                  alt="Encendedor"
-                />
+                <img src="@/assets/Images/encendedor.png" class="objeto-img" :class="{ 'objeto-img--bloqueado': !store.encendedorDesbloqueado }" alt="Encendedor" />
               </div>
               <p class="objeto-nombre">ENCEND.</p>
               <p class="objeto-cargas" :class="{ 'objeto-lock': !store.encendedorDesbloqueado }">
                 <span v-if="!store.encendedorDesbloqueado">🔒</span>
                 <span v-else>CARGAS: {{ store.objetos.encendedor.cargas }}</span>
               </p>
-              <p v-if="store.encendedorDesbloqueado" class="objeto-efecto-desc">
-                Quema carta perjudicial
-              </p>
+              <p v-if="store.encendedorDesbloqueado" class="objeto-efecto-desc">Quema carta perjudicial</p>
             </div>
 
             <!-- PURO -->
@@ -214,21 +156,14 @@
               @click="confirmarPuro"
             >
               <div class="objeto-img-wrap">
-                <img
-                  src="@/assets/Images/puro.png"
-                  class="objeto-img"
-                  :class="{ 'objeto-img--bloqueado': !store.puroDesbloqueado }"
-                  alt="Puro"
-                />
+                <img src="@/assets/Images/puro.png" class="objeto-img" :class="{ 'objeto-img--bloqueado': !store.puroDesbloqueado }" alt="Puro" />
               </div>
               <p class="objeto-nombre">PURO</p>
               <p class="objeto-cargas" :class="{ 'objeto-lock': !store.puroDesbloqueado }">
                 <span v-if="!store.puroDesbloqueado">🔒</span>
                 <span v-else>CARGAS: {{ store.objetos.puro.cargas }}</span>
               </p>
-              <p v-if="store.puroDesbloqueado" class="objeto-efecto-desc">
-                Revela carta oculta del crupier
-              </p>
+              <p v-if="store.puroDesbloqueado" class="objeto-efecto-desc">Revela carta oculta del crupier</p>
             </div>
           </div>
 
@@ -255,29 +190,10 @@
 
   const puedeUsarPistola = computed(() => !bloqueado.value && store.objetos.pistola.balas > 0)
   const puedeUsarComodin = computed(() => !bloqueado.value && store.objetos.comoDin.disponible > 0)
-  const puedeUsarCopa = computed(
-    () =>
-      !bloqueado.value &&
-      store.objetos.copa.cargas > 0 &&
-      store.playerHand.some((c) => !c.esFantasma)
-  )
-  const puedeUsarJeringa = computed(
-    () => !bloqueado.value && store.jeringaDesbloqueada && store.objetos.jeringa.cargas > 0
-  )
-  const puedeUsarEncendedor = computed(
-    () =>
-      !bloqueado.value &&
-      store.encendedorDesbloqueado &&
-      store.objetos.encendedor.cargas > 0 &&
-      store.playerHand.filter((c) => !c.esFantasma).length > 1
-  )
-  const puedeUsarPuro = computed(
-    () =>
-      !bloqueado.value &&
-      store.puroDesbloqueado &&
-      store.objetos.puro.cargas > 0 &&
-      store.dealerHand.some((c) => c.hidden)
-  )
+  const puedeUsarCopa = computed(() => !bloqueado.value && store.objetos.copa.cargas > 0 && store.playerHand.some((c) => !c.esFantasma))
+  const puedeUsarJeringa = computed(() => !bloqueado.value && store.jeringaDesbloqueada && store.objetos.jeringa.cargas > 0)
+  const puedeUsarEncendedor = computed(() => !bloqueado.value && store.encendedorDesbloqueado && store.objetos.encendedor.cargas > 0 && store.playerHand.filter((c) => !c.esFantasma).length > 1)
+  const puedeUsarPuro = computed(() => !bloqueado.value && store.puroDesbloqueado && store.objetos.puro.cargas > 0 && store.dealerHand.some((c) => c.hidden))
 
   function toggleObjeto(nombre) {
     if (nombre === 'pistola' && !puedeUsarPistola.value) return

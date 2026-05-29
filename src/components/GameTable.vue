@@ -3,13 +3,7 @@
     <!-- ZONA CRUPIER: sin score tag, el puntaje va en el monitor -->
     <div class="zone zone--dealer">
       <div class="cards-row">
-        <Card
-          v-for="(card, i) in store.dealerHand"
-          :key="i"
-          :card="card"
-          :dealer="true"
-          :style="{ '--r': (i - store.dealerHand.length / 2) * 4 }"
-        />
+        <Card v-for="(card, i) in store.dealerHand" :key="i" :card="card" :dealer="true" :style="{ '--r': (i - store.dealerHand.length / 2) * 4 }" />
       </div>
     </div>
 
@@ -21,12 +15,7 @@
     <!-- ZONA JUGADOR -->
     <div class="zone zone--player">
       <div class="cards-row">
-        <Card
-          v-for="(card, i) in store.playerHand"
-          :key="i"
-          :card="card"
-          :style="{ '--r': (i - store.playerHand.length / 2) * 5 }"
-        />
+        <Card v-for="(card, i) in store.playerHand" :key="i" :card="card" :style="{ '--r': (i - store.playerHand.length / 2) * 5 }" />
       </div>
     </div>
 

@@ -44,10 +44,8 @@
             <div
               class="objeto-card"
               :class="{
-                'objeto-card--disponible':
-                  puedeComprar(150) && store.objetos.comoDin.disponible.value === 0,
-                'objeto-card--agotado':
-                  !puedeComprar(150) || store.objetos.comoDin.disponible.value > 0,
+                'objeto-card--disponible': puedeComprar(150) && store.objetos.comoDin.disponible.value === 0,
+                'objeto-card--agotado': !puedeComprar(150) || store.objetos.comoDin.disponible.value > 0,
               }"
               @click="comprar('comodin')"
             >
@@ -56,9 +54,7 @@
               </div>
               <p class="objeto-nombre">COMODÍN</p>
               <p class="objeto-stock">
-                <span v-if="store.objetos.comoDin.disponible.value > 0" class="stock-ok"
-                  >✓ DISPONIBLE</span
-                >
+                <span v-if="store.objetos.comoDin.disponible.value > 0" class="stock-ok">✓ DISPONIBLE</span>
                 <span v-else>DISP: 0</span>
               </p>
               <div class="objeto-precio-wrap">
@@ -101,17 +97,10 @@
                 'objeto-card--agotado': store.jeringaDesbloqueada && !puedeComprar(200),
                 'objeto-card--bloqueado': !store.jeringaDesbloqueada,
               }"
-              @click="
-                store.jeringaDesbloqueada ? comprar('jeringa') : intentarDesbloquear('jeringa')
-              "
+              @click="store.jeringaDesbloqueada ? comprar('jeringa') : intentarDesbloquear('jeringa')"
             >
               <div class="objeto-img-wrap">
-                <img
-                  src="@/assets/Images/jeringa.png"
-                  class="objeto-img"
-                  :class="{ 'objeto-img--bloqueado': !store.jeringaDesbloqueada }"
-                  alt="Jeringa"
-                />
+                <img src="@/assets/Images/jeringa.png" class="objeto-img" :class="{ 'objeto-img--bloqueado': !store.jeringaDesbloqueada }" alt="Jeringa" />
               </div>
               <p class="objeto-nombre">JERINGA</p>
               <p class="objeto-stock" :class="{ 'objeto-lock': !store.jeringaDesbloqueada }">
@@ -119,9 +108,7 @@
                 <span v-else>CARGAS: {{ store.objetos.jeringa.cargas.value }}</span>
               </p>
               <div class="objeto-precio-wrap">
-                <span v-if="!store.jeringaDesbloqueada" class="objeto-precio desbloqueo-precio-btn"
-                  >🔓 1000 $</span
-                >
+                <span v-if="!store.jeringaDesbloqueada" class="objeto-precio desbloqueo-precio-btn">🔓 1000 $</span>
                 <span v-else class="objeto-precio">200 $</span>
                 <span class="objeto-desc">Congela al crupier</span>
               </div>
@@ -135,19 +122,10 @@
                 'objeto-card--agotado': store.encendedorDesbloqueado && !puedeComprar(175),
                 'objeto-card--bloqueado': !store.encendedorDesbloqueado,
               }"
-              @click="
-                store.encendedorDesbloqueado
-                  ? comprar('encendedor')
-                  : intentarDesbloquear('encendedor')
-              "
+              @click="store.encendedorDesbloqueado ? comprar('encendedor') : intentarDesbloquear('encendedor')"
             >
               <div class="objeto-img-wrap">
-                <img
-                  src="@/assets/Images/encendedor.png"
-                  class="objeto-img"
-                  :class="{ 'objeto-img--bloqueado': !store.encendedorDesbloqueado }"
-                  alt="Encendedor"
-                />
+                <img src="@/assets/Images/encendedor.png" class="objeto-img" :class="{ 'objeto-img--bloqueado': !store.encendedorDesbloqueado }" alt="Encendedor" />
               </div>
               <p class="objeto-nombre">ENCEND.</p>
               <p class="objeto-stock" :class="{ 'objeto-lock': !store.encendedorDesbloqueado }">
@@ -155,11 +133,7 @@
                 <span v-else>CARGAS: {{ store.objetos.encendedor.cargas.value }}</span>
               </p>
               <div class="objeto-precio-wrap">
-                <span
-                  v-if="!store.encendedorDesbloqueado"
-                  class="objeto-precio desbloqueo-precio-btn"
-                  >🔓 1000 $</span
-                >
+                <span v-if="!store.encendedorDesbloqueado" class="objeto-precio desbloqueo-precio-btn">🔓 1000 $</span>
                 <span v-else class="objeto-precio">175 $</span>
                 <span class="objeto-desc">Quema carta perjudicial</span>
               </div>
@@ -176,12 +150,7 @@
               @click="store.puroDesbloqueado ? comprar('puro') : intentarDesbloquear('puro')"
             >
               <div class="objeto-img-wrap">
-                <img
-                  src="@/assets/Images/puro.png"
-                  class="objeto-img"
-                  :class="{ 'objeto-img--bloqueado': !store.puroDesbloqueado }"
-                  alt="Puro"
-                />
+                <img src="@/assets/Images/puro.png" class="objeto-img" :class="{ 'objeto-img--bloqueado': !store.puroDesbloqueado }" alt="Puro" />
               </div>
               <p class="objeto-nombre">PURO</p>
               <p class="objeto-stock" :class="{ 'objeto-lock': !store.puroDesbloqueado }">
@@ -189,9 +158,7 @@
                 <span v-else>CARGAS: {{ store.objetos.puro.cargas.value }}</span>
               </p>
               <div class="objeto-precio-wrap">
-                <span v-if="!store.puroDesbloqueado" class="objeto-precio desbloqueo-precio-btn"
-                  >🔓 1000 $</span
-                >
+                <span v-if="!store.puroDesbloqueado" class="objeto-precio desbloqueo-precio-btn">🔓 1000 $</span>
                 <span v-else class="objeto-precio">125 $</span>
                 <span class="objeto-desc">Revela carta oculta</span>
               </div>
@@ -199,9 +166,7 @@
           </div>
 
           <div class="modal-divider"></div>
-          <p class="modal-hint">
-            CLICK EN UN OBJETO PARA COMPRARLO — CLICK EN 🔒 PARA DESBLOQUEARLO — ESC PARA CERRAR
-          </p>
+          <p class="modal-hint">CLICK EN UN OBJETO PARA COMPRARLO — CLICK EN 🔒 PARA DESBLOQUEARLO — ESC PARA CERRAR</p>
         </div>
       </div>
     </Transition>

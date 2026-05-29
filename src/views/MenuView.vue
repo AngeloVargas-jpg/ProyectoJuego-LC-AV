@@ -55,9 +55,8 @@
                 <h2 class="rules-section-title">▌ OBJETIVO</h2>
                 <p class="rules-text">
                   Conseguir una mano con valor lo más cercano posible a
-                  <strong class="hl">21</strong> sin pasarse, superando al Crupier. El primero que
-                  acumule <strong class="hl">5 victorias</strong> gana la serie. Si el Crupier llega
-                  a 5 victorias antes, perderás y comenzará una nueva partida desde cero.
+                  <strong class="hl">21</strong> sin pasarse, superando al Crupier. El primero que acumule <strong class="hl">5 victorias</strong> gana la serie. Si el Crupier llega a 5 victorias
+                  antes, perderás y comenzará una nueva partida desde cero.
                 </p>
               </section>
 
@@ -89,30 +88,23 @@
                 <h2 class="rules-section-title">▌ CÓMO SE JUEGA UN TURNO</h2>
                 <ol class="rules-list">
                   <li>
-                    <span class="rules-step">01</span> <strong class="hl">APOSTAR O NEGAR</strong> —
-                    Elige cuánto arriesgar (mínimo 50 $) o niega la apuesta para jugar sin fichas.
+                    <span class="rules-step">01</span> <strong class="hl">APOSTAR O NEGAR</strong> — Elige cuánto arriesgar (mínimo 50 $) o niega la apuesta para jugar sin fichas.
                     <em>Si niegas, los objetos quedan bloqueados ese turno.</em>
                   </li>
                   <li>
-                    <span class="rules-step">02</span> <strong class="hl">TU TURNO</strong> — Puedes
-                    <strong>Pedir carta</strong> (sumar una carta a tu mano) o
-                    <strong>Plantarte</strong> (quedarte con lo que tienes). También puedes usar
-                    objetos antes de decidir.
+                    <span class="rules-step">02</span> <strong class="hl">TU TURNO</strong> — Puedes <strong>Pedir carta</strong> (sumar una carta a tu mano) o <strong>Plantarte</strong> (quedarte con
+                    lo que tienes). También puedes usar objetos antes de decidir.
                   </li>
                   <li>
                     <span class="rules-step">03</span>
-                    <strong class="hl">TURNO DEL CRUPIER</strong> — El Crupier roba automáticamente
-                    hasta tener 17 o más puntos, y entonces se planta.
+                    <strong class="hl">TURNO DEL CRUPIER</strong> — El Crupier roba automáticamente hasta tener 17 o más puntos, y entonces se planta.
                   </li>
                   <li>
-                    <span class="rules-step">04</span> <strong class="hl">RESULTADO</strong> — Gana
-                    quien esté más cerca de 21 sin pasarse. Si ambos se pasan, gana el que tenga el
-                    puntaje menor.
+                    <span class="rules-step">04</span> <strong class="hl">RESULTADO</strong> — Gana quien esté más cerca de 21 sin pasarse. Si ambos se pasan, gana el que tenga el puntaje menor.
                   </li>
                   <li>
-                    <span class="rules-step">05</span> <strong class="hl">SIGUIENTE TURNO</strong> —
-                    Recibes 25 $ al inicio de cada nuevo turno. También pueden aparecer cargas de
-                    objetos como bonus aleatorio.
+                    <span class="rules-step">05</span> <strong class="hl">SIGUIENTE TURNO</strong> — Recibes 25 $ al inicio de cada nuevo turno. También pueden aparecer cargas de objetos como bonus
+                    aleatorio.
                   </li>
                 </ol>
               </section>
@@ -123,11 +115,9 @@
               <section class="rules-section">
                 <h2 class="rules-section-title">▌ APUESTAS Y DINERO</h2>
                 <p class="rules-text">
-                  Al apostar, tu dinero <strong class="hl">y</strong> el del Crupier (fondos
-                  ilimitados) entran al pozo. Si ganas, te llevas el pozo completo. Si empatas,
-                  recuperas tu apuesta. Si pierdes, el Crupier se lleva todo. Al inicio de cada
-                  turno de apuestas recibes <strong class="hl">+25 $</strong> automáticamente. Si
-                  bajas de 50 $, el juego te completa hasta el mínimo para que siempre puedas jugar.
+                  Al apostar, tu dinero <strong class="hl">y</strong> el del Crupier (fondos ilimitados) entran al pozo. Si ganas, te llevas el pozo completo. Si empatas, recuperas tu apuesta. Si
+                  pierdes, el Crupier se lleva todo. Al inicio de cada turno de apuestas recibes <strong class="hl">+25 $</strong> automáticamente. Si bajas de 50 $, el juego te completa hasta el
+                  mínimo para que siempre puedas jugar.
                 </p>
               </section>
 
@@ -137,60 +127,33 @@
               <section class="rules-section">
                 <h2 class="rules-section-title">▌ OBJETOS</h2>
                 <p class="rules-text rules-text--small">
-                  Los objetos se usan durante <strong class="hl">tu turno</strong> (excepto si
-                  negaste la apuesta). Se compran en la <strong class="hl">TIENDA</strong> con tus
-                  fichas, y también pueden aparecer como bonus al final de cada turno. Los objetos
-                  <strong class="hl">PREMIUM</strong> requieren desbloqueo previo (1000 $) antes de
-                  poder comprarse.
+                  Los objetos se usan durante <strong class="hl">tu turno</strong> (excepto si negaste la apuesta). Se compran en la <strong class="hl">TIENDA</strong> con tus fichas, y también pueden
+                  aparecer como bonus al final de cada turno. Los objetos <strong class="hl">PREMIUM</strong> requieren desbloqueo previo (1000 $) antes de poder comprarse.
                 </p>
                 <div class="rules-objetos-grid">
                   <div class="rules-objeto">
                     <span class="rules-objeto-name">🔫 PISTOLA</span>
-                    <span class="rules-objeto-desc"
-                      >Añade ±5 puntos a tu mano o a la del Crupier. 50% de chance de acertar el
-                      efecto elegido; si falla, el efecto se invierte.</span
-                    >
+                    <span class="rules-objeto-desc">Añade ±5 puntos a tu mano o a la del Crupier. 50% de chance de acertar el efecto elegido; si falla, el efecto se invierte.</span>
                   </div>
                   <div class="rules-objeto">
                     <span class="rules-objeto-name">🃏 COMODÍN</span>
-                    <span class="rules-objeto-desc"
-                      >Suma o resta un valor aleatorio (1–13) a tu puntuación. Elige la dirección,
-                      el valor es al azar.</span
-                    >
+                    <span class="rules-objeto-desc">Suma o resta un valor aleatorio (1–13) a tu puntuación. Elige la dirección, el valor es al azar.</span>
                   </div>
                   <div class="rules-objeto">
                     <span class="rules-objeto-name">🍷 COPA</span>
-                    <span class="rules-objeto-desc"
-                      >Devuelve tu última carta al mazo, como si nunca la hubieras robado. Útil para
-                      deshacer una mala jugada.</span
-                    >
+                    <span class="rules-objeto-desc">Devuelve tu última carta al mazo, como si nunca la hubieras robado. Útil para deshacer una mala jugada.</span>
                   </div>
                   <div class="rules-objeto premium-obj">
-                    <span class="rules-objeto-name"
-                      >💉 JERINGA <span class="premium-tag">PREMIUM</span></span
-                    >
-                    <span class="rules-objeto-desc"
-                      >Congela al Crupier un turno completo: no podrá robar carta en su próximo
-                      turno.</span
-                    >
+                    <span class="rules-objeto-name">💉 JERINGA <span class="premium-tag">PREMIUM</span></span>
+                    <span class="rules-objeto-desc">Congela al Crupier un turno completo: no podrá robar carta en su próximo turno.</span>
                   </div>
                   <div class="rules-objeto premium-obj">
-                    <span class="rules-objeto-name"
-                      >🔥 ENCENDEDOR <span class="premium-tag">PREMIUM</span></span
-                    >
-                    <span class="rules-objeto-desc"
-                      >Quema la carta más perjudicial de tu mano. Si te pasaste de 21, elimina la
-                      carta de mayor valor. Si no, elimina la más pequeña.</span
-                    >
+                    <span class="rules-objeto-name">🔥 ENCENDEDOR <span class="premium-tag">PREMIUM</span></span>
+                    <span class="rules-objeto-desc">Quema la carta más perjudicial de tu mano. Si te pasaste de 21, elimina la carta de mayor valor. Si no, elimina la más pequeña.</span>
                   </div>
                   <div class="rules-objeto premium-obj">
-                    <span class="rules-objeto-name"
-                      >🌑 PURO <span class="premium-tag">PREMIUM</span></span
-                    >
-                    <span class="rules-objeto-desc"
-                      >Revela la carta oculta del Crupier este turno, permitiéndote tomar decisiones
-                      con información completa.</span
-                    >
+                    <span class="rules-objeto-name">🌑 PURO <span class="premium-tag">PREMIUM</span></span>
+                    <span class="rules-objeto-desc">Revela la carta oculta del Crupier este turno, permitiéndote tomar decisiones con información completa.</span>
                   </div>
                 </div>
               </section>
@@ -201,26 +164,11 @@
               <section class="rules-section">
                 <h2 class="rules-section-title">▌ CONSEJOS</h2>
                 <ul class="rules-tips">
-                  <li>
-                    Plántate con <strong class="hl">17 o más</strong> a menos que el Crupier muestre
-                    una carta muy alta.
-                  </li>
-                  <li>
-                    Negar la apuesta te protege las fichas si no confías en tu mano, pero pierdes
-                    acceso a los objetos.
-                  </li>
-                  <li>
-                    Guarda la <strong class="hl">Copa</strong> para cuando recibas una carta que te
-                    lleve al borde del 21 o te haga pasarte.
-                  </li>
-                  <li>
-                    La <strong class="hl">Pistola</strong> puede disparar contra el Crupier para
-                    sumarle puntos y hacerlo pasarse de 21.
-                  </li>
-                  <li>
-                    Desbloquea los objetos Premium lo antes posible — el Encendedor y la Jeringa
-                    pueden cambiar el resultado de una ronda entera.
-                  </li>
+                  <li>Plántate con <strong class="hl">17 o más</strong> a menos que el Crupier muestre una carta muy alta.</li>
+                  <li>Negar la apuesta te protege las fichas si no confías en tu mano, pero pierdes acceso a los objetos.</li>
+                  <li>Guarda la <strong class="hl">Copa</strong> para cuando recibas una carta que te lleve al borde del 21 o te haga pasarte.</li>
+                  <li>La <strong class="hl">Pistola</strong> puede disparar contra el Crupier para sumarle puntos y hacerlo pasarse de 21.</li>
+                  <li>Desbloquea los objetos Premium lo antes posible — el Encendedor y la Jeringa pueden cambiar el resultado de una ronda entera.</li>
                 </ul>
               </section>
             </div>
@@ -407,10 +355,7 @@
       height: `${height}%`,
       transform: `translateX(${offset}px)`,
       animationDelay: `${delay}s`,
-      background:
-        Math.random() > 0.5
-          ? `rgba(180,0,0,${Math.random() * 0.6 + 0.2})`
-          : `rgba(0,0,0,${Math.random() * 0.8 + 0.2})`,
+      background: Math.random() > 0.5 ? `rgba(180,0,0,${Math.random() * 0.6 + 0.2})` : `rgba(0,0,0,${Math.random() * 0.8 + 0.2})`,
     }
   }
 
