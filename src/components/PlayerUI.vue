@@ -9,28 +9,19 @@
       <div class="ui__bet-row">
         <button
           class="ui__chip"
-          @click="
-            playClick()
-            setPreset(50)
-          "
+          @click="playClick(); setPreset(50)"
         >
           50
         </button>
         <button
           class="ui__chip"
-          @click="
-            playClick()
-            setPreset(100)
-          "
+          @click="playClick(); setPreset(100)"
         >
           100
         </button>
         <button
           class="ui__chip"
-          @click="
-            playClick()
-            setPreset(200)
-          "
+          @click="playClick(); setPreset(200)"
         >
           200
         </button>
@@ -46,20 +37,14 @@
         <button
           class="ui__btn ui__btn--bet"
           :disabled="!canBet"
-          @click="
-            playClick()
-            placeBet()
-          "
+          @click="playClick(); placeBet()"
         >
           ▶ APOSTAR
         </button>
 
         <button
           class="ui__btn ui__btn--deny"
-          @click="
-            playClick()
-            store.negarApuesta()
-          "
+          @click="playClick(); store.negarApuesta()"
         >
           ✕ NEGAR
         </button>
@@ -77,10 +62,7 @@
       <button
         class="ui__btn ui__btn--hit"
         :disabled="store.gameOver"
-        @click="
-          playClick()
-          store.playerHit()
-        "
+        @click="playClick(); store.playerHit()"
       >
         ▶ PEDIR CARTA
       </button>
@@ -88,10 +70,7 @@
       <button
         class="ui__btn ui__btn--stand"
         :disabled="store.gameOver"
-        @click="
-          playClick()
-          store.playerStand()
-        "
+        @click="playClick(); store.playerStand()"
       >
         ■ PLANTARSE
       </button>
@@ -115,10 +94,7 @@
 
       <button
         class="ui__btn ui__btn--restart"
-        @click="
-          playClick()
-          store.startGame()
-        "
+        @click="playClick(); store.startGame()"
       >
         ↺ NUEVA PARTIDA
       </button>
@@ -147,25 +123,22 @@
   const betAmount = ref(store.apuestaMinima || 50)
 
   function playClick() {
-    const AudioCtx = window.AudioContext || window.webkitAudioContext
-    const audioCtx = new AudioCtx()
-
-    const oscillator = audioCtx.createOscillator()
-    const gainNode = audioCtx.createGain()
-
-    oscillator.type = 'square'
-    oscillator.frequency.value = 700
-
-    gainNode.gain.setValueAtTime(0.02, audioCtx.currentTime)
-    gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.04)
-
-    oscillator.connect(gainNode)
-    gainNode.connect(audioCtx.destination)
-
-    oscillator.start()
-    oscillator.stop(audioCtx.currentTime + 0.04)
-  }
-
+  try {
+    const AC = window.AudioContext ?? window.webkitAudioContext
+    if (!AC) return
+    const ctx = new AC()
+    const osc = ctx.createOscillator()
+    const gain = ctx.createGain()
+    osc.type = 'square'
+    osc.frequency.value = 700
+    gain.gain.setValueAtTime(0.02, ctx.currentTime)
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.04)
+    osc.connect(gain)
+    gain.connect(ctx.destination)
+    osc.start()
+    osc.stop(ctx.currentTime + 0.04)
+  } catch (e) {}
+}
   const canBet = computed(
     () => betAmount.value >= store.apuestaMinima && betAmount.value <= store.dineroJugador
   )
@@ -419,3 +392,5 @@
     }
   }
 </style>
+
+
