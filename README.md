@@ -119,8 +119,6 @@ Cada objeto se puede cargar parcialmente por turno (probabilidad aleatoria) o co
 | Bundler | [Vite](https://vitejs.dev/) |
 | Estado global | [Pinia](https://pinia.vuejs.org/) |
 | Ruteo | [Vue Router](https://router.vuejs.org/) |
-| Animaciones | [GSAP](https://gsap.com/) |
-| Audio | [Howler.js](https://howlerjs.com/) |
 | Gestor de paquetes | [pnpm](https://pnpm.io/) |
 | Tests | [Vitest](https://vitest.dev/) |
 | Linter / Formato | [ESLint](https://eslint.org/) + [Prettier](https://prettier.io/) |

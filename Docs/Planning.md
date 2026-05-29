@@ -42,13 +42,13 @@
 
 |**Tarea**|**Estado**|
 |-|-|
-|Implementación objeto Puro, Jeringa y Encendedor|Pendiente #Por temas de avances lo movimos a la semana 4|
+|~~Implementación objeto Puro, Jeringa y Encendedor~~|~~Pendiente #Por temas de avances lo movimos a la semana 4~~|
 |Creación de Tienda de Objetos|Completado|
-|Test para funcionamiento de objetos|Pendiente #Por temas de avances lo movimos a la semana 4|
-|Test para funcionamiento de mazo y calculo de puntajes|Pendiente #Por temas de avances lo movimos a la semana 4|
+|~~Test para funcionamiento de objetos~~|~~Pendiente #Por temas de avances lo movimos a la semana 4~~|
+|~~Test para funcionamiento de mazo y calculo de puntajes~~|~~Pendiente #Por temas de avances lo movimos a la semana 4~~|
 |Aplicar estilos según los mockups|Completado|
 |Animaciones para cartas y otros|Completado|
-|Sonidos y efectos|Pendiente #Por temas de avances lo movimos a la semana 4|
+|~~Sonidos y efectos~~|~~Pendiente #Por temas de avances lo movimos a la semana 4~~|
 
 
 
@@ -58,15 +58,16 @@
 
 |**Tarea**|**Estado**|
 |-|-|
-|Revisar y corregir dockerfile|Pendiente|
-|Configurar main.yml|Pendiente #falta CD|
-|Completar README|Pendiente |
-|Pruebas de compatibilidad en navegadores|Pendiente|
-|Corrección de errores finales|Pendiente|
-|Implementación objeto Puro, Jeringa y Encendedor|Pendiente|
+|Revisar y corregir dockerfile|Completado|
+|Configurar main.yml|Completado|
+|Completar README|Completado|
+|Pruebas de compatibilidad en navegadores|Completado #Firefox, Chrome, Brave, Edge|
+|Corrección de errores finales|Completado|
+|Implementación objeto Puro, Jeringa y Encendedor|Completado|
 |Test para funcionamiento de objetos|Completado|
 |Test para funcionamiento de mazo y calculo de puntajes|Completado|
-|Sonidos y efectos|Pendiente|
+|Sonidos y efectos|Completado|
+|Modificación Design|Completado #Ajustes de estructura/dependencias y flujo de juego |
 
 
 

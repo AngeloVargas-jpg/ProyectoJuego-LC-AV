@@ -3,21 +3,21 @@
 </template>
 
 <script setup>
-import { RouterView } from 'vue-router'
-import { onMounted, onUnmounted } from 'vue'
+  import { RouterView } from 'vue-router'
+  import { onMounted, onUnmounted } from 'vue'
 
-import soundtrack from '@/assets/audio/soundtrack.mp3'
+  import soundtrack from '@/assets/audio/soundtrack.mp3'
 
-const bgMusic = new Audio(soundtrack)
+  const bgMusic = new Audio(soundtrack)
 
-bgMusic.loop = true
-bgMusic.volume = 0.015
+  bgMusic.loop = true
+  bgMusic.volume = 0.015
 
-onMounted(() => {
-  bgMusic.play().catch(() => {})
-})
+  onMounted(() => {
+    bgMusic.play().catch(() => {})
+  })
 
-onUnmounted(() => {
-  bgMusic.pause()
-})
+  onUnmounted(() => {
+    bgMusic.pause()
+  })
 </script>

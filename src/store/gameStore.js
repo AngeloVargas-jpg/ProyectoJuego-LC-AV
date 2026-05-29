@@ -27,25 +27,10 @@ export const useGameStore = defineStore('game', () => {
   const dealerStood = ref(false)
 
   // ── Sistema de desbloqueo premium individual ──
-  // Versión del save — al cambiar este valor se limpian desbloqueos guardados
-  const SAVE_VERSION = 'v3'
-  if (localStorage.getItem('saveVersion') !== SAVE_VERSION) {
-    localStorage.removeItem('jeringaDesbloqueada')
-    localStorage.removeItem('encendedorDesbloqueado')
-    localStorage.removeItem('puroDesbloqueado')
-    localStorage.setItem('saveVersion', SAVE_VERSION)
-  }
-
   const PRECIO_DESBLOQUEO = 1000
-  const jeringaDesbloqueada = ref(
-    localStorage.getItem('jeringaDesbloqueada') === 'true'
-  )
-  const encendedorDesbloqueado = ref(
-    localStorage.getItem('encendedorDesbloqueado') === 'true'
-  )
-  const puroDesbloqueado = ref(
-    localStorage.getItem('puroDesbloqueado') === 'true'
-  )
+  const jeringaDesbloqueada = ref(false)
+  const encendedorDesbloqueado = ref(false)
+  const puroDesbloqueado = ref(false)
 
   // Computed para compatibilidad: true si los 3 están desbloqueados
   const objetosDesbloqueados = computed(
@@ -57,11 +42,6 @@ export const useGameStore = defineStore('game', () => {
       jeringa: jeringaDesbloqueada,
       encendedor: encendedorDesbloqueado,
       puro: puroDesbloqueado,
-    }
-    const mapaStorage = {
-      jeringa: 'jeringaDesbloqueada',
-      encendedor: 'encendedorDesbloqueado',
-      puro: 'puroDesbloqueado',
     }
     const mapaNombre = {
       jeringa: 'JERINGA',
@@ -77,7 +57,6 @@ export const useGameStore = defineStore('game', () => {
     }
     dineroJugador.value -= PRECIO_DESBLOQUEO
     estado.value = true
-    localStorage.setItem(mapaStorage[objeto], 'true')
     return { ok: true, mensaje: `🔓 ${mapaNombre[objeto]} DESBLOQUEADO` }
   }
 
@@ -185,7 +164,9 @@ export const useGameStore = defineStore('game', () => {
     }
     if (victoriasCrupier.value >= 5) {
       message.value = '💀 EL CRUPIER GANÓ LA PARTIDA'
-      setTimeout(() => { startGame(true) }, 2000)
+      setTimeout(() => {
+        startGame(true)
+      }, 2000)
       return
     }
     message.value = gameMessage
@@ -197,8 +178,13 @@ export const useGameStore = defineStore('game', () => {
     const pPaso = pScore > 21
     const dPaso = dScore > 21
     if (pPaso && dPaso) {
-      if (pScore < dScore) endGame('player', `Ambos se pasaron. Tu ${pScore} está más cerca de 21. Ganaste.`)
-      else if (dScore < pScore) endGame('dealer', `Ambos se pasaron. El crupier (${dScore}) está más cerca. Gana el crupier.`)
+      if (pScore < dScore)
+        endGame('player', `Ambos se pasaron. Tu ${pScore} está más cerca de 21. Ganaste.`)
+      else if (dScore < pScore)
+        endGame(
+          'dealer',
+          `Ambos se pasaron. El crupier (${dScore}) está más cerca. Gana el crupier.`
+        )
       else endGame('tie', `Ambos se pasaron con ${pScore}. Empate.`)
     } else if (pPaso) {
       endGame('dealer', `Te pasaste de 21 (${pScore}). El crupier gana.`)
@@ -242,6 +228,9 @@ export const useGameStore = defineStore('game', () => {
       victoriasJugador.value = 0
       victoriasCrupier.value = 0
       dineroJugador.value = 1000
+      jeringaDesbloqueada.value = false
+      encendedorDesbloqueado.value = false
+      puroDesbloqueado.value = false
     }
 
     const c1 = drawCard()
@@ -257,9 +246,18 @@ export const useGameStore = defineStore('game', () => {
   }
 
   const hacerApuesta = (cantidad) => {
-    if (faseJuego.value !== 'apuestas') { message.value = 'No puedes apostar en este momento.'; return }
-    if (cantidad < apuestaMinima.value) { message.value = `La apuesta mínima es ${apuestaMinima.value}.`; return }
-    if (cantidad > dineroJugador.value) { message.value = 'No tienes suficiente dinero para esa apuesta.'; return }
+    if (faseJuego.value !== 'apuestas') {
+      message.value = 'No puedes apostar en este momento.'
+      return
+    }
+    if (cantidad < apuestaMinima.value) {
+      message.value = `La apuesta mínima es ${apuestaMinima.value}.`
+      return
+    }
+    if (cantidad > dineroJugador.value) {
+      message.value = 'No tienes suficiente dinero para esa apuesta.'
+      return
+    }
     dineroJugador.value -= cantidad
     // El crupier tiene fondos ilimitados — no se descuenta
     apuestaJugador.value += cantidad
@@ -270,7 +268,10 @@ export const useGameStore = defineStore('game', () => {
   }
 
   const negarApuesta = () => {
-    if (faseJuego.value !== 'apuestas') { message.value = 'No puedes negar la apuesta ahora.'; return }
+    if (faseJuego.value !== 'apuestas') {
+      message.value = 'No puedes negar la apuesta ahora.'
+      return
+    }
     jugadorNego.value = true
     message.value = 'Has negado la apuesta este turno. Objetos bloqueados.'
     faseJuego.value = 'turnoJugador'
@@ -279,7 +280,10 @@ export const useGameStore = defineStore('game', () => {
   const playerHit = () => {
     if (gameOver.value || faseJuego.value !== 'turnoJugador') return
     const c = drawCard()
-    if (c) { ultimaCartaJugador.value = c; playerHand.value.push(c) }
+    if (c) {
+      ultimaCartaJugador.value = c
+      playerHand.value.push(c)
+    }
     playerScore.value = calcScore(playerHand.value)
     faseJuego.value = 'turnoCrupier'
     turnoCrupier()
@@ -324,18 +328,36 @@ export const useGameStore = defineStore('game', () => {
     const mensajeObjetoUsado = objetoMensaje.value
 
     const mensajesObjetos = []
-    if (Math.random() < 0.15) { objetos.pistola.balas.value++; mensajesObjetos.push('+1 bala') }
-    if (Math.random() < 0.2 && objetos.comoDin.disponible.value === 0) { objetos.comoDin.disponible.value = 1; mensajesObjetos.push('Comodín disponible') }
-    if (Math.random() < 0.2) { objetos.copa.cargas.value++; mensajesObjetos.push('+1 carga de copa') }
+    if (Math.random() < 0.15) {
+      objetos.pistola.balas.value++
+      mensajesObjetos.push('+1 bala')
+    }
+    if (Math.random() < 0.2 && objetos.comoDin.disponible.value === 0) {
+      objetos.comoDin.disponible.value = 1
+      mensajesObjetos.push('Comodín disponible')
+    }
+    if (Math.random() < 0.2) {
+      objetos.copa.cargas.value++
+      mensajesObjetos.push('+1 carga de copa')
+    }
 
     if (jeringaDesbloqueada.value) {
-      if (Math.random() < 0.15) { objetos.jeringa.cargas.value++; mensajesObjetos.push('+1 jeringa') }
+      if (Math.random() < 0.15) {
+        objetos.jeringa.cargas.value++
+        mensajesObjetos.push('+1 jeringa')
+      }
     }
     if (encendedorDesbloqueado.value) {
-      if (Math.random() < 0.15) { objetos.encendedor.cargas.value++; mensajesObjetos.push('+1 encendedor') }
+      if (Math.random() < 0.15) {
+        objetos.encendedor.cargas.value++
+        mensajesObjetos.push('+1 encendedor')
+      }
     }
     if (puroDesbloqueado.value) {
-      if (Math.random() < 0.18) { objetos.puro.cargas.value++; mensajesObjetos.push('+1 puro') }
+      if (Math.random() < 0.18) {
+        objetos.puro.cargas.value++
+        mensajesObjetos.push('+1 puro')
+      }
     }
 
     cartaCrupierRevelada.value = false
@@ -353,9 +375,8 @@ export const useGameStore = defineStore('game', () => {
       mensajesObjetos.push(`+${complemento} $ (complemento mínimo)`)
     }
 
-    const mensajeTurno = mensajesObjetos.length > 0
-      ? `OBTUVISTE: ${mensajesObjetos.join(' — ')}`
-      : ''
+    const mensajeTurno =
+      mensajesObjetos.length > 0 ? `OBTUVISTE: ${mensajesObjetos.join(' — ')}` : ''
 
     // Si se usó un objeto este turno, mostrar su mensaje primero y luego los del turno
     if (mensajeObjetoUsado) {
@@ -392,7 +413,8 @@ export const useGameStore = defineStore('game', () => {
       return { ok: false, mensaje: '🔒 REQUIERE DESBLOQUEO INDIVIDUAL (1000 $)' }
     }
 
-    if (dineroJugador.value < precio) return { ok: false, mensaje: `FONDOS INSUFICIENTES — Necesitas ${precio} $` }
+    if (dineroJugador.value < precio)
+      return { ok: false, mensaje: `FONDOS INSUFICIENTES — Necesitas ${precio} $` }
 
     if (objeto === 'comodin' && objetos.comoDin.disponible.value > 0) {
       return { ok: false, mensaje: 'YA TIENES UN COMODÍN DISPONIBLE' }
@@ -400,19 +422,38 @@ export const useGameStore = defineStore('game', () => {
 
     dineroJugador.value -= precio
 
-    if (objeto === 'pistola') { objetos.pistola.balas.value++; return { ok: true, mensaje: `COMPRADO — +1 bala (${precio} $)` } }
-    if (objeto === 'comodin') { objetos.comoDin.disponible.value = 1; return { ok: true, mensaje: `COMPRADO — Comodín disponible (${precio} $)` } }
-    if (objeto === 'copa') { objetos.copa.cargas.value++; return { ok: true, mensaje: `COMPRADO — +1 carga de copa (${precio} $)` } }
-    if (objeto === 'jeringa') { objetos.jeringa.cargas.value++; return { ok: true, mensaje: `COMPRADO — +1 jeringa (${precio} $)` } }
-    if (objeto === 'encendedor') { objetos.encendedor.cargas.value++; return { ok: true, mensaje: `COMPRADO — +1 encendedor (${precio} $)` } }
-    if (objeto === 'puro') { objetos.puro.cargas.value++; return { ok: true, mensaje: `COMPRADO — +1 puro (${precio} $)` } }
+    if (objeto === 'pistola') {
+      objetos.pistola.balas.value++
+      return { ok: true, mensaje: `COMPRADO — +1 bala (${precio} $)` }
+    }
+    if (objeto === 'comodin') {
+      objetos.comoDin.disponible.value = 1
+      return { ok: true, mensaje: `COMPRADO — Comodín disponible (${precio} $)` }
+    }
+    if (objeto === 'copa') {
+      objetos.copa.cargas.value++
+      return { ok: true, mensaje: `COMPRADO — +1 carga de copa (${precio} $)` }
+    }
+    if (objeto === 'jeringa') {
+      objetos.jeringa.cargas.value++
+      return { ok: true, mensaje: `COMPRADO — +1 jeringa (${precio} $)` }
+    }
+    if (objeto === 'encendedor') {
+      objetos.encendedor.cargas.value++
+      return { ok: true, mensaje: `COMPRADO — +1 encendedor (${precio} $)` }
+    }
+    if (objeto === 'puro') {
+      objetos.puro.cargas.value++
+      return { ok: true, mensaje: `COMPRADO — +1 puro (${precio} $)` }
+    }
 
     return { ok: false, mensaje: 'Error desconocido.' }
   }
 
   // ── OBJETOS BASE ──
   const usarPistola = (objetivo, efecto) => {
-    if (faseJuego.value !== 'turnoJugador' || jugadorNego.value || objetos.pistola.balas.value <= 0) return
+    if (faseJuego.value !== 'turnoJugador' || jugadorNego.value || objetos.pistola.balas.value <= 0)
+      return
     objetos.pistola.balas.value--
     const acierta = Math.random() >= 0.5
     const efectoReal = acierta ? efecto : efecto === 'sumar' ? 'restar' : 'sumar'
@@ -420,12 +461,24 @@ export const useGameStore = defineStore('game', () => {
     const cartaFantasma = { value: valorCarta, suit: '🔫', hidden: false, esFantasma: true }
     const accionTexto = efectoReal === 'sumar' ? 'sumó' : 'restó'
     const resultadoTexto = acierta ? 'ACERTÓ.' : 'FALLÓ. Efecto invertido.'
-    if (objetivo === 'jugador') { playerHand.value.push(cartaFantasma); playerScore.value = calcScore(playerHand.value); objetoMensaje.value = `PISTOLA — ${resultadoTexto} Te ${accionTexto} 5 puntos.` }
-    else if (objetivo === 'crupier') { dealerHand.value.push(cartaFantasma); dealerScore.value = calcScore(dealerHand.value); objetoMensaje.value = `PISTOLA — ${resultadoTexto} Le ${accionTexto} 5 puntos al crupier.` }
+    if (objetivo === 'jugador') {
+      playerHand.value.push(cartaFantasma)
+      playerScore.value = calcScore(playerHand.value)
+      objetoMensaje.value = `PISTOLA — ${resultadoTexto} Te ${accionTexto} 5 puntos.`
+    } else if (objetivo === 'crupier') {
+      dealerHand.value.push(cartaFantasma)
+      dealerScore.value = calcScore(dealerHand.value)
+      objetoMensaje.value = `PISTOLA — ${resultadoTexto} Le ${accionTexto} 5 puntos al crupier.`
+    }
   }
 
   const usarComodin = (accion) => {
-    if (faseJuego.value !== 'turnoJugador' || jugadorNego.value || objetos.comoDin.disponible.value <= 0) return
+    if (
+      faseJuego.value !== 'turnoJugador' ||
+      jugadorNego.value ||
+      objetos.comoDin.disponible.value <= 0
+    )
+      return
     objetos.comoDin.disponible.value = 0
     const valorAleatorio = Math.floor(Math.random() * 13) + 1
     const valorCarta = accion === 'sumar' ? `+${valorAleatorio}` : `-${valorAleatorio}`
@@ -436,8 +489,10 @@ export const useGameStore = defineStore('game', () => {
   }
 
   const usarCopa = () => {
-    if (faseJuego.value !== 'turnoJugador' || jugadorNego.value || objetos.copa.cargas.value <= 0) return
-    const cartaObjetivo = ultimaCartaJugador.value ?? [...playerHand.value].reverse().find((c) => !c.esFantasma) ?? null
+    if (faseJuego.value !== 'turnoJugador' || jugadorNego.value || objetos.copa.cargas.value <= 0)
+      return
+    const cartaObjetivo =
+      ultimaCartaJugador.value ?? [...playerHand.value].reverse().find((c) => !c.esFantasma) ?? null
     if (!cartaObjetivo) return
     objetos.copa.cargas.value--
     const index = playerHand.value.findIndex((card) => card === cartaObjetivo)
@@ -452,7 +507,12 @@ export const useGameStore = defineStore('game', () => {
 
   // JERINGA: congela el turno del crupier (no roba carta en su próximo turno)
   const usarJeringa = () => {
-    if (faseJuego.value !== 'turnoJugador' || jugadorNego.value || objetos.jeringa.cargas.value <= 0) return
+    if (
+      faseJuego.value !== 'turnoJugador' ||
+      jugadorNego.value ||
+      objetos.jeringa.cargas.value <= 0
+    )
+      return
     if (!jeringaDesbloqueada.value) return
     objetos.jeringa.cargas.value--
     crupierCongelado.value = true
@@ -461,10 +521,18 @@ export const useGameStore = defineStore('game', () => {
 
   // ENCENDEDOR: quema la carta más perjudicial del jugador
   const usarEncendedor = () => {
-    if (faseJuego.value !== 'turnoJugador' || jugadorNego.value || objetos.encendedor.cargas.value <= 0) return
+    if (
+      faseJuego.value !== 'turnoJugador' ||
+      jugadorNego.value ||
+      objetos.encendedor.cargas.value <= 0
+    )
+      return
     if (!encendedorDesbloqueado.value) return
     const cartasReales = playerHand.value.filter((c) => !c.esFantasma)
-    if (cartasReales.length <= 1) { objetoMensaje.value = 'ENCENDEDOR — No hay carta que quemar.'; return }
+    if (cartasReales.length <= 1) {
+      objetoMensaje.value = 'ENCENDEDOR — No hay carta que quemar.'
+      return
+    }
 
     const getCardValue = (card) => {
       if (card.value === 'A') return 11
@@ -475,10 +543,14 @@ export const useGameStore = defineStore('game', () => {
     const pScore = calcScore(playerHand.value)
     let cartaObjetivo
     if (pScore > 21) {
-      cartaObjetivo = cartasReales.reduce((max, c) => getCardValue(c) > getCardValue(max) ? c : max)
+      cartaObjetivo = cartasReales.reduce((max, c) =>
+        getCardValue(c) > getCardValue(max) ? c : max
+      )
       objetoMensaje.value = `ENCENDEDOR — Quemaste el ${cartaObjetivo.value}${cartaObjetivo.suit} (te pasabas). 🔥`
     } else {
-      cartaObjetivo = cartasReales.reduce((min, c) => getCardValue(c) < getCardValue(min) ? c : min)
+      cartaObjetivo = cartasReales.reduce((min, c) =>
+        getCardValue(c) < getCardValue(min) ? c : min
+      )
       objetoMensaje.value = `ENCENDEDOR — Quemaste el ${cartaObjetivo.value}${cartaObjetivo.suit}. 🔥`
     }
 
@@ -490,10 +562,14 @@ export const useGameStore = defineStore('game', () => {
 
   // PURO: revela la carta oculta del crupier este turno
   const usarPuro = () => {
-    if (faseJuego.value !== 'turnoJugador' || jugadorNego.value || objetos.puro.cargas.value <= 0) return
+    if (faseJuego.value !== 'turnoJugador' || jugadorNego.value || objetos.puro.cargas.value <= 0)
+      return
     if (!puroDesbloqueado.value) return
     const cartaOculta = dealerHand.value.find((c) => c.hidden)
-    if (!cartaOculta) { objetoMensaje.value = 'PURO — No hay carta oculta del crupier.'; return }
+    if (!cartaOculta) {
+      objetoMensaje.value = 'PURO — No hay carta oculta del crupier.'
+      return
+    }
     objetos.puro.cargas.value--
     cartaCrupierRevelada.value = true
     cartaOculta.hidden = false
@@ -502,21 +578,54 @@ export const useGameStore = defineStore('game', () => {
   }
 
   return {
-    deck, playerHand, dealerHand, playerScore, dealerScore,
-    gameOver, winner, message, playerStood,
-    victoriasJugador, victoriasCrupier,
-    dineroJugador, dineroCrupier, apuestaJugador, apuestaCrupier,
-    apuestaMinima, jugadorNego, faseJuego, turnoNumero, dealerStood,
-    objetos, ultimaCartaJugador, objetoMensaje,
-    dealerVisibleScore, crupierCongelado, cartaCrupierRevelada,
-    objetosDesbloqueados, PRECIO_DESBLOQUEO,
-    jeringaDesbloqueada, encendedorDesbloqueado, puroDesbloqueado,
-    startGame, playerHit, playerStand, calcScore,
-    hacerApuesta, negarApuesta, cobrarApuesta,
-    turnoCrupier, runDealerTurn,
-    usarPistola, usarComodin, usarCopa,
-    usarJeringa, usarEncendedor, usarPuro,
-    comprarObjeto, preciosTienda,
+    deck,
+    playerHand,
+    dealerHand,
+    playerScore,
+    dealerScore,
+    gameOver,
+    winner,
+    message,
+    playerStood,
+    victoriasJugador,
+    victoriasCrupier,
+    dineroJugador,
+    dineroCrupier,
+    apuestaJugador,
+    apuestaCrupier,
+    apuestaMinima,
+    jugadorNego,
+    faseJuego,
+    turnoNumero,
+    dealerStood,
+    objetos,
+    ultimaCartaJugador,
+    objetoMensaje,
+    dealerVisibleScore,
+    crupierCongelado,
+    cartaCrupierRevelada,
+    objetosDesbloqueados,
+    PRECIO_DESBLOQUEO,
+    jeringaDesbloqueada,
+    encendedorDesbloqueado,
+    puroDesbloqueado,
+    startGame,
+    playerHit,
+    playerStand,
+    calcScore,
+    hacerApuesta,
+    negarApuesta,
+    cobrarApuesta,
+    turnoCrupier,
+    runDealerTurn,
+    usarPistola,
+    usarComodin,
+    usarCopa,
+    usarJeringa,
+    usarEncendedor,
+    usarPuro,
+    comprarObjeto,
+    preciosTienda,
     desbloquearObjeto,
   }
 })

@@ -11,7 +11,6 @@
     "format": "prettier --write src"
   },
   "dependencies": {
-    "gsap": "^3.15.0",
     "howler": "^2.2.4",
     "pinia": "^3.0.4",
     "vue": "^3.5.32",
@@ -23,7 +22,6 @@
     "@vue/test-utils": "^2.4.10",
     "eslint": "^10.4.0",
     "eslint-plugin-vue": "^10.9.1",
-    "jest": "^30.3.0",
     "prettier": "^3.8.3",
     "vite": "^8.0.10",
     "vitest": "^4.1.7"
