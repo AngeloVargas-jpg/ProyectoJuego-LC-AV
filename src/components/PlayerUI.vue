@@ -2,14 +2,14 @@
   <div class="ui">
     <!-- ══ FASE: APUESTAS ══ -->
     <div v-if="store.faseJuego === 'apuestas'" class="ui__panel ui__panel--bet">
-      <span class="ui__label"
-        >TURNO_{{ String(store.turnoNumero).padStart(2, '0') }} // APUESTA</span
-      >
+      <span class="ui__label">
+        TURNO_{{ String(store.turnoNumero).padStart(2, '0') }} // APUESTA
+      </span>
 
       <div class="ui__bet-row">
-        <button class="ui__chip" @click="setPreset(50)">50</button>
-        <button class="ui__chip" @click="setPreset(100)">100</button>
-        <button class="ui__chip" @click="setPreset(200)">200</button>
+        <button class="ui__chip" @click="playClick(); setPreset(50)">50</button>
+        <button class="ui__chip" @click="playClick(); setPreset(100)">100</button>
+        <button class="ui__chip" @click="playClick(); setPreset(200)">200</button>
 
         <input
           v-model.number="betAmount"
@@ -19,36 +19,68 @@
           class="ui__input"
         />
 
-        <button class="ui__btn ui__btn--bet" :disabled="!canBet" @click="placeBet">
+        <button
+          class="ui__btn ui__btn--bet"
+          :disabled="!canBet"
+          @click="playClick(); placeBet()"
+        >
           ▶ APOSTAR
         </button>
-        <button class="ui__btn ui__btn--deny" @click="store.negarApuesta()">✕ NEGAR</button>
+
+        <button
+          class="ui__btn ui__btn--deny"
+          @click="playClick(); store.negarApuesta()"
+        >
+          ✕ NEGAR
+        </button>
       </div>
 
-      <span v-if="!canBet && betAmount < store.apuestaMinima" class="ui__hint">
+      <span
+        v-if="!canBet && betAmount < store.apuestaMinima"
+        class="ui__hint"
+      >
         MÍN: {{ store.apuestaMinima }} $
       </span>
-      <span v-else-if="!canBet" class="ui__hint">FONDOS INSUFICIENTES</span>
+
+      <span v-else-if="!canBet" class="ui__hint">
+        FONDOS INSUFICIENTES
+      </span>
     </div>
 
-    <!-- ══ FASE: TURNO JUGADOR ══ -->
-    <div v-else-if="store.faseJuego === 'turnoJugador'" class="ui__panel ui__panel--turn">
-      <button class="ui__btn ui__btn--hit" :disabled="store.gameOver" @click="store.playerHit()">
+    <!-- ══ TURNO JUGADOR ══ -->
+    <div
+      v-else-if="store.faseJuego === 'turnoJugador'"
+      class="ui__panel ui__panel--turn"
+    >
+      <button
+        class="ui__btn ui__btn--hit"
+        :disabled="store.gameOver"
+        @click="playClick(); store.playerHit()"
+      >
         ▶ PEDIR CARTA
       </button>
+
       <button
         class="ui__btn ui__btn--stand"
         :disabled="store.gameOver"
-        @click="store.playerStand()"
+        @click="playClick(); store.playerStand()"
       >
         ■ PLANTARSE
       </button>
-      <span v-if="store.jugadorNego" class="ui__warn">⚠ OBJETOS BLOQUEADOS</span>
+
+      <span v-if="store.jugadorNego" class="ui__warn">
+        ⚠ OBJETOS BLOQUEADOS
+      </span>
     </div>
 
-    <!-- ══ FASE: CRUPIER ══ -->
-    <div v-else-if="store.faseJuego === 'turnoCrupier'" class="ui__panel ui__panel--dealer">
-      <span class="ui__label ui__label--blink">▌ PROCESANDO TURNO DEL CRUPIER...</span>
+    <!-- ══ TURNO CRUPIER ══ -->
+    <div
+      v-else-if="store.faseJuego === 'turnoCrupier'"
+      class="ui__panel ui__panel--dealer"
+    >
+      <span class="ui__label ui__label--blink">
+        ▌ PROCESANDO TURNO DEL CRUPIER...
+      </span>
     </div>
 
     <!-- ══ RESULTADO ══ -->
@@ -56,44 +88,96 @@
       v-else-if="store.faseJuego === 'resultado' || store.gameOver"
       class="ui__panel ui__panel--result"
     >
-      <span class="ui__result-msg">{{ store.message }}</span>
-      <button class="ui__btn ui__btn--restart" @click="store.startGame()">↺ NUEVA PARTIDA</button>
+      <span class="ui__result-msg">
+        {{ store.message }}
+      </span>
+
+      <button
+        class="ui__btn ui__btn--restart"
+        @click="playClick(); store.startGame()"
+      >
+        ↺ NUEVA PARTIDA
+      </button>
     </div>
 
-    <!-- Fichas siempre visibles -->
+    <!-- HUD -->
     <div class="ui__hud">
-      <span class="ui__hud-item">💰 {{ store.dineroJugador }} $</span>
-      <span v-if="store.apuestaJugador > 0" class="ui__hud-item ui__hud-item--bet">
+      <span class="ui__hud-item">
+        💰 {{ store.dineroJugador }} $
+      </span>
+
+      <span
+        v-if="store.apuestaJugador > 0"
+        class="ui__hud-item ui__hud-item--bet"
+      >
         BET: {{ store.apuestaJugador }} $
       </span>
+
       <span class="ui__hud-item ui__hud-item--wins">
-        W: {{ store.victoriasJugador }} / L: {{ store.victoriasCrupier }}
+        W: {{ store.victoriasJugador }}
+        /
+        L: {{ store.victoriasCrupier }}
       </span>
     </div>
   </div>
 </template>
 
 <script setup>
-  import { ref, computed, onMounted } from 'vue'
-  import { useGameStore } from '@/store/gameStore'
+import { ref, computed, onMounted } from 'vue'
+import { useGameStore } from '@/store/gameStore'
 
-  const store = useGameStore()
-  const betAmount = ref(store.apuestaMinima || 50)
+const store = useGameStore()
+const betAmount = ref(store.apuestaMinima || 50)
 
-  const canBet = computed(
-    () => betAmount.value >= store.apuestaMinima && betAmount.value <= store.dineroJugador
+function playClick() {
+  const audioCtx =
+    new (window.AudioContext ||
+      window.webkitAudioContext)()
+
+  const oscillator =
+    audioCtx.createOscillator()
+
+  const gainNode =
+    audioCtx.createGain()
+
+  oscillator.type = 'square'
+  oscillator.frequency.value = 700
+
+  gainNode.gain.setValueAtTime(
+    0.02,
+    audioCtx.currentTime
   )
 
-  function setPreset(n) {
-    betAmount.value = n
-  }
+  gainNode.gain.exponentialRampToValueAtTime(
+    0.001,
+    audioCtx.currentTime + 0.04
+  )
 
-  function placeBet() {
-    if (!canBet.value) return
-    store.hacerApuesta(betAmount.value)
-  }
+  oscillator.connect(gainNode)
+  gainNode.connect(audioCtx.destination)
 
-  onMounted(() => store.startGame())
+  oscillator.start()
+  oscillator.stop(audioCtx.currentTime + 0.04)
+}
+
+const canBet = computed(
+  () =>
+    betAmount.value >= store.apuestaMinima &&
+    betAmount.value <= store.dineroJugador
+)
+
+function setPreset(n) {
+  betAmount.value = n
+}
+
+function placeBet() {
+  if (!canBet.value) return
+  store.hacerApuesta(betAmount.value)
+}
+
+onMounted(() => {
+  store.startGame()
+})
 </script>
 
 <style scoped>
