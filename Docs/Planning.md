@@ -70,4 +70,17 @@
 |Modificación Design|Completado #Ajustes de estructura/dependencias y flujo de juego |
 
 
+###### **Mejoras**
+-Cambiar diseño de cartas
+-Poner las cartas sobre la mesa (cambiar pov jugador) 
+-Implementar más objetos 
+-Mejorar animaciones y assets
+-Quitar boton de opciones 
+-Añadir boton de mute
+-Añadir Instrucciones en el juego
+-Mejorar el sistema de mensajes/eventos 
 
+###### **Posibles ideas**
+-Incorporar sistema roguelike, como avance por niveles, (niveles con crupieres con distintas habilidades/dificultades)
+-Implementar sistema online player vs player (Considerar la posibilidad de incorporar al crupier)
+-Sistema de perfiles/inicio de sesión
