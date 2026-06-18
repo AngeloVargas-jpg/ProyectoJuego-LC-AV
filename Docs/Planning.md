@@ -67,20 +67,76 @@
 |Test para funcionamiento de objetos|Completado|
 |Test para funcionamiento de mazo y calculo de puntajes|Completado|
 |Sonidos y efectos|Completado|
-|Modificación Design|Completado #Ajustes de estructura/dependencias y flujo de juego |
+|Modificación Design|Completado #Ajustes de estructura/dependencias y flujo de juego|
+
 
 
 ###### **Mejoras**
--Cambiar diseño de cartas
--Poner las cartas sobre la mesa (cambiar pov jugador) 
--Implementar más objetos 
+
+\-Cambiar diseño de cartas
+-Poner las cartas sobre la mesa (cambiar pov jugador)
+-Implementar más objetos
 -Mejorar animaciones y assets
--Quitar boton de opciones 
+-Quitar boton de opciones
 -Añadir boton de mute
 -Añadir Instrucciones en el juego
--Mejorar el sistema de mensajes/eventos 
+-Mejorar el sistema de mensajes/eventos
 
 ###### **Posibles ideas**
--Incorporar sistema roguelike, como avance por niveles, (niveles con crupieres con distintas habilidades/dificultades)
--Implementar sistema online player vs player (Considerar la posibilidad de incorporar al crupier)
--Sistema de perfiles/inicio de sesión
+
+~~-Incorporar sistema roguelike, como avance por niveles, (niveles con crupieres con distintas habilidades/dificultades)~~
+**-Implementar sistema online player vs player (Considerar la posibilidad de incorporar al crupier)
+-Sistema de perfiles/inicio de sesión**
+
+
+
+##### **Segunda Entrega** 
+
+
+
+###### **SEMANA 1 (lunes 15, martes 16, jueves 18)**
+
+|**Tarea**|**Estado**|
+|-|-|
+|Añadir Planning para Segunda Entrega|Completado|
+|Investigar y definir herramientas para backend|Pendiente|
+|Planificar y diseñar Sistema online player vs player|Pendiente|
+|Actualizar Planning.md|Pendiente|
+|Actualizar Planning definiendo tareas/objetivos|Pendiente|
+
+
+
+
+
+
+
+###### **SEMANA 2 (lunes 22, martes 23, jueves 25)**
+
+
+
+|**Tarea**|**Estado**|
+|-|-|
+|Mejorar diseño de cartas|Pendiente|
+|Cambiar perspectiva de cámara/ Poner las cartas sobre la mesa|Pendiente|
+|Añadir botón de mute|Pendiente|
+|Mejorar interfaz y añadir/actualizar instrucciones en el juego|Pendiente|
+|Mejorar el sistema de mensajes/eventos|Pendiente|
+|Incorporar sistema de login/inicio de sesión (por confirmar)|Pendiente|
+
+
+
+###### **SEMANA 3 (lunes 29, martes 30, jueves 2)**
+
+
+
+**Tareas de Semana 3 y 2 serán añadidas una vez se complete la investigación y planificación de la semana 1**
+
+|**Tarea**|**Estado**|
+|-|-|
+|Actualizar Actions/workflow|Pendiente|
+|Actualizar Readme|Pendiente|
+
+
+
+
+

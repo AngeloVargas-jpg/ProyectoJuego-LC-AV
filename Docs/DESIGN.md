@@ -12,11 +12,50 @@
 ### Resultado
 ![Resultado](Mockups/Ganar%20juego.png)
 ![Resultado](Mockups/Perder%20juego.png)
+
+---
+
 ## Especificaciones de tecnología
-FrameWork elegido: Vue
-Elegimos este FrameWork descartando React y Angular ya que existe una leve experiencia en el uso de este, encontrando a este framework mas sencillo y simple para implementar en nuestro proyecto, el React suele ser mas tedioso y mas formal aunque puede lograr el mismo resultado esperado, se inclino por Vue más por un tema de comodidad.
-### Estructura de carpetas:
-El proyecto tendra varias carpetas que tendran respectivos archivos con sus propias funcionalidades pero que se conectaran entre si para el funcionamiento del juego.
+
+### Framework elegido: Vue
+Elegimos este framework descartando React y Angular ya que existe una leve experiencia en el uso de este, encontrando a este framework más sencillo y simple para implementar en nuestro proyecto. React suele ser más tedioso y formal aunque puede lograr el mismo resultado esperado; se inclinó por Vue más por un tema de comodidad.
+
+---
+
+## Stack tecnológico
+
+### Frontend
+- **Vue 3** — Framework principal
+- **Vite** — Entorno de desarrollo y compilación
+- **Pinia** — Manejo del estado global del juego
+- **Vue Router** — Navegación entre vistas
+- **Socket.io-client** — Comunicación en tiempo real con el servidor
+
+### Backend
+- **Node.js** — Entorno de ejecución del servidor
+- **Express** — Framework para construir la API REST
+- **Socket.io** — Comunicación en tiempo real para el modo multijugador
+- **MongoDB** — Base de datos NoSQL para persistir cuentas de usuario, historial de partidas y estadísticas
+- **Mongoose** — ODM para modelar los datos de MongoDB en Node.js
+- **JWT (JSON Web Token)** — Autenticación stateless del usuario
+- **bcrypt** — Encriptación de contraseñas antes de guardarlas en la base de datos
+- **cookie-parser** — Manejo de cookies httpOnly para guardar el token JWT de forma segura
+
+### Herramientas de desarrollo
+- **pnpm** — Gestor de paquetes
+- **Vitest** — Framework de testing
+- **ESLint** — Linter de código
+- **Prettier** — Formateo de código
+- **@vue/test-utils** — Utilidades de testing para Vue
+
+> Nota: Se evaluaron dependencias como GSAP (animaciones) y Howler.js (audio), pero se descartaron por no ser necesarias dado el alcance del proyecto. El audio se implementó con la Web Audio API nativa del navegador.
+
+> **Importante — qué se guarda y qué no:** las fichas (dinero) y los objetos (cargas, desbloqueos premium) son parte del estado de **una partida en curso** y se reinician por completo cada vez que se inicia una partida nueva; nunca se escriben en MongoDB. Lo único que persiste en la cuenta del usuario son sus credenciales y sus estadísticas históricas (victorias y derrotas totales).
+
+---
+
+## Estructura de carpetas
+
 ```
 ProyectoJuego-LC-AV/
 ├── index.html
@@ -46,136 +85,250 @@ ProyectoJuego-LC-AV/
 ├── Test/
 │   └── gameStore.test.js
 │
-└── src/
-    ├── App.vue
-    ├── main.js
+├── src/                          ← Frontend (Vue)
+│   ├── App.vue
+│   ├── main.js
+│   │
+│   ├── assets/
+│   │   ├── Images/
+│   │   └── audio/
+│   │
+│   ├── components/
+│   │   ├── Card.vue
+│   │   ├── GameTable.vue
+│   │   ├── PlayerUI.vue
+│   │   ├── ScreenDisplay.vue
+│   │   ├── ObjetosModal.vue
+│   │   └── TiendaModal.vue
+│   │
+│   ├── views/
+│   │   ├── MenuView.vue
+│   │   ├── GameView.vue
+│   │   └── LoginView.vue         ← nuevo
+│   │
+│   ├── store/
+│   │   └── gameStore.js
+│   │
+│   └── router/
+│       └── index.js
+│
+└── server/                       ← Backend (Node.js + Express)
+    ├── index.js                  ← entrada del servidor
+    ├── socket.js                 ← lógica de Socket.io (salas, turnos, Singleplayer y PvP)
     │
-    ├── assets/
-    │   ├── Images/
-    │   │   ├── bg-menu.png
-    │   │   ├── fondo.png
-    │   │   ├── btn-nuevo-contrato.png
-    │   │   ├── btn-opciones.png
-    │   │   ├── btn-reglamentos.png
-    │   │   ├── btn-salir.png
-    │   │   ├── comodin.png
-    │   │   ├── copa.png
-    │   │   ├── encendedor.png
-    │   │   ├── jeringa.png
-    │   │   ├── puro.png
-    │   │   └── revolver.png
-    │   └── audio/
-    │       └── soundtrack.mp3
+    ├── routes/
+    │   ├── auth.routes.js        ← /api/auth/login, /api/auth/register, /api/auth/logout
+    │   └── user.routes.js        ← /api/user/profile, /api/user/stats
     │
-    ├── components/
-    │   ├── Card.vue
-    │   ├── GameTable.vue
-    │   ├── PlayerUI.vue
-    │   ├── ScreenDisplay.vue
-    │   ├── ObjetosModal.vue
-    │   └── TiendaModal.vue
+    ├── controllers/
+    │   ├── auth.controller.js    ← lógica de login y registro
+    │   └── user.controller.js    ← lógica de perfil y estadísticas
     │
-    ├── views/
-    │   ├── MenuView.vue
-    │   └── GameView.vue
+    ├── models/
+    │   ├── User.js               ← modelo de usuario en MongoDB (sin fichas ni objetos)
+    │   └── Game.js                ← historial de partidas terminadas en MongoDB
     │
-    ├── store/
-    │   └── gameStore.js
+    ├── game/                      ← nuevo: lógica de una partida en curso (vive en memoria, no en Mongo)
+    │   ├── GameEngine.js          ← reparto, turnos, puntajes, fichas y objetos de la partida actual
+    │   ├── CrupierBot.js          ← IA del Crupier para el modo Singleplayer
+    │   └── Deck.js                ← mazo de cartas
     │
-    └── router/
-        └── index.js
+    ├── data/                      ← nuevo: catálogo estático de objetos (no cambia entre partidas)
+    │   └── items.js               ← Pistola, Comodín, Copa de Vino, Jeringa, Encendedor, Puro
+    │
+    └── middleware/
+        └── auth.middleware.js    ← verifica el JWT en cada petición protegida
 ```
-### Dependencias
-Base del proyecto
 
-Vue 3 — Framework principal
-Vite — Entorno de desarrollo y compilación
-pnpm — Gestor de paquetes
+---
 
-Dependencias funcionales
+## Endpoints de la API
 
-Pinia — Manejo del estado global del juego (cartas, turnos, dinero, fase)
-Vue Router — Navegación entre vistas (menú principal y mesa de juego)
+### Autenticación (`/api/auth`)
+| Método | Endpoint | Descripción |
+|--------|----------|-------------|
+| POST | `/api/auth/register` | Registra un nuevo usuario |
+| POST | `/api/auth/login` | Inicia sesión, devuelve JWT en cookie httpOnly |
+| POST | `/api/auth/logout` | Cierra sesión, elimina la cookie |
 
-Dependencias de desarrollo
+### Usuario (`/api/user`)
+| Método | Endpoint | Descripción |
+|--------|----------|-------------|
+| GET | `/api/user/profile` | Devuelve datos del usuario autenticado |
+| GET | `/api/user/stats` | Devuelve victorias y derrotas totales acumuladas en su historial |
 
-Vitest — Framework de testing
-ESLint — Linter de código
-Prettier — Formateo de código
-@vue/test-utils — Utilidades de testing para Vue
+> No existen endpoints REST para fichas, objetos ni tienda: todo eso ocurre dentro de una partida en curso a través de Socket.io (ver más abajo), porque es estado temporal que no necesita guardarse.
 
-Nota: Se evaluaron dependencias como GSAP (animaciones) y Howler.js (audio), pero se descartaron por no ser necesarias dado el alcance del proyecto.
-### Entorno de Desarrollo
+---
+
+## Autenticación: JWT + Cookie httpOnly
+
+El flujo de autenticación funciona así:
+
+1. El usuario manda usuario y contraseña a `POST /api/auth/login`
+2. El servidor verifica la contraseña con **bcrypt**
+3. Si es correcta, genera un **JWT** firmado con una clave secreta
+4. El JWT se guarda en una **cookie httpOnly** — el navegador la manda automáticamente en cada petición pero el código JS no puede leerla, protegiéndola contra ataques XSS
+5. En cada petición protegida, el **middleware** verifica que el JWT sea válido
+6. Al hacer logout, el servidor elimina la cookie
+
+---
+
+## Modelos de MongoDB
+
+### User
+```js
+{
+  username: String,      // nombre de usuario único
+  password: String,      // contraseña encriptada con bcrypt
+  victorias: Number,     // partidas completas ganadas (histórico de la cuenta)
+  derrotas: Number,      // partidas completas perdidas (histórico de la cuenta)
+  createdAt: Date
+}
+// dinero y objetos NO se guardan aquí: se reinician en cada partida nueva
+```
+
+### Game
+```js
+{
+  modo: String,           // "singleplayer" o "pvp"
+  players: [userId],      // jugadores de la partida (1 humano + bot, o 2 humanos)
+  winner: userId,         // ganador
+  scores: {
+    player1: Number,      // rondas ganadas
+    player2: Number
+  },
+  duration: Number,        // duración en segundos
+  createdAt: Date
+}
+// Solo guarda el resultado final. Las fichas y objetos usados durante
+// la partida no se incluyen porque desaparecen al terminar.
+```
+
+---
+
+## Multijugador con Socket.io
+
+Socket.io maneja toda la partida en curso: tanto Singleplayer como PvP usan el mismo flujo de eventos. En Singleplayer, el servidor crea la sala y simula al segundo "jugador" con `CrupierBot.js` (no hay un segundo socket real); en PvP, ambos lados son jugadores humanos conectados.
+
+```
+Cliente A                    Servidor                    Cliente B / CrupierBot
+    │                           │                           │
+    │── join_room ─────────────>│                           │
+    │                           │<────────────── join_room ─│   (o el bot, automático)
+    │                           │── room_ready ────────────>│
+    │<─────────────── room_ready│                           │
+    │                           │                           │
+    │                           │ fichas (1000) y objetos   │
+    │                           │ se inicializan en memoria │
+    │                           │                           │
+    │── player_action ─────────>│── game_state ────────────>│
+    │<─────────────── game_state│                           │
+    │── buy_item ───────────────>│── game_state ────────────>│
+```
+
+### Eventos principales
+| Evento | Dirección | Descripción |
+|--------|-----------|-------------|
+| `join_room` | Cliente → Servidor | Jugador entra a una sala (Singleplayer crea una con el bot; PvP empareja con otro jugador) |
+| `room_ready` | Servidor → Clientes | Sala lista; el servidor inicializa fichas (1000) y objetos en memoria y comienza la partida |
+| `player_action` | Cliente → Servidor | Jugador pide carta, se planta, apuesta o usa un objeto |
+| `buy_item` | Cliente → Servidor | Jugador compra una carga de objeto usando las fichas de la partida actual |
+| `game_state` | Servidor → Clientes | Estado actualizado del juego (fichas, objetos e inventario vigentes de esa partida) |
+| `game_over` | Servidor → Clientes | Fin de partida: resultado final; fichas y objetos de esa partida se descartan |
+
+---
+
+## Entorno de Desarrollo
 Visual Studio Code
 
+---
+
 ## Descripción del juego
+
 ### Nombre: Contrato 21: El pacto de sangre
-“Contrato 21: El pacto de sangre”, es un juego de cartas basado en el clásico 21 blackjack, con una estética tenebrosa/industrial, donde te enfrentarás al “Crupier”, una calavera robótica que busca eliminarte, Apuesta fichas para multiplicar tu dinero entre partida para comprar los objetos que te proporciona la mesa para sacar ventaja.
+"Contrato 21: El pacto de sangre" es un juego de cartas basado en el clásico blackjack, con una estética tenebrosa/industrial. En el modo **Singleplayer** te enfrentarás al "Crupier", una calavera robótica que busca eliminarte; en el modo **PvP** te enfrentarás a otro jugador real. En ambos casos apuestas fichas para multiplicar tu dinero durante la partida y comprar los objetos que te proporciona la mesa para sacar ventaja — fichas y objetos son exclusivos de cada partida y comienzan de cero cada vez que juegas.
 
-## Mecánica:
+---
+
+## Mecánica
+
+### Blackjack base
+Se reparten dos cartas tanto al jugador como al rival (Crupier en Singleplayer, otro jugador en PvP). Una carta de cada uno permanece oculta para el otro. El objetivo es acercarse lo más posible a 21 sin pasarse.
+
+### Objetos especiales
+
+| Objeto | Tipo | Efecto |
+|--------|------|--------|
+| Pistola | Estándar | 50% de sumar o restar 5 puntos al total propio o del rival. Parte con 1 bala. |
+| Comodín | Estándar | Suma o resta una cantidad aleatoria entre 1 y 13. Se elige la acción. |
+| Copa de Vino | Estándar | Devuelve la última carta pedida al mazo. |
+| Jeringa | Premium | Congela al rival: no roba carta en su próximo turno. |
+| Encendedor | Premium | Quema la carta más perjudicial de tu mano. |
+| Puro | Premium | Revela la carta oculta del rival. |
+
+Los objetos estándar están disponibles desde el inicio de cada partida. Los objetos premium requieren un desbloqueo único de 1000 $ antes de poder comprarse o usarse **dentro de esa partida**: como las fichas y objetos no se guardan, este desbloqueo hay que volver a pagarlo cada vez que se empieza una partida nueva.
+
+### Mecánica de apuestas
+- Jugador y rival parten con 1000 fichas al iniciar cada partida (sin importar lo que se haya ganado o perdido en partidas anteriores)
+- Apuesta mínima por turno: 50 fichas
+- El jugador puede apostar la mínima, subir la apuesta o negarla
+- Negar la apuesta bloquea el uso de todos los objetos ese turno
+- En Singleplayer, el Crupier tiene fondos ilimitados; en PvP ambos jugadores apuestan con sus propias 1000 fichas iniciales, sin fondos ilimitados
+- Al inicio de cada nuevo turno de apuestas el jugador recibe +25 fichas
+
+---
+
+## Flujo de juego
+
 ```
-Blackjack base
-Se reparten dos cartas tanto al jugador como al crupier. Una carta de cada uno permanece oculta para el rival. El objetivo es acercarse lo más posible a 21 sin pasarse.
-Objetos especiales
+1. Login / Registro
+   └── El usuario se autentica; se cargan solo sus credenciales y estadísticas históricas
 
-Pistola (Estándar) — 50% de sumar o restar 5 puntos al total propio o del crupier. Parte con 1 bala por partida.
-Comodín (Estándar) — Suma o resta una cantidad aleatoria entre 1 y 13. Se elige la acción.
-Copa de Vino (Estándar) — Devuelve la última carta pedida al mazo.
-Jeringa (Premium) — Congela al crupier: no roba carta en su próximo turno.
-Encendedor (Premium) — Quema la carta más perjudicial de tu mano.
-Puro (Premium) — Revela la carta oculta del crupier.
+2. Selección de modo
+   ├── Singleplayer  → el servidor crea una sala con el CrupierBot
+   └── PvP           → el servidor empareja con otro jugador
 
-Los objetos estándar están disponibles desde el inicio. Los objetos premium requieren un desbloqueo único de 1000 $ antes de poder comprarse o usarse. Una vez desbloqueados, se pueden adquirir recargas en la tienda.
-Las cargas de objetos se obtienen de dos formas:
-
-Aleatoriamente al final de cada turno (probabilidad variable por objeto)
-Comprándolas en la tienda con fichas ganadas en apuestas
-
-Mecánica de apuestas
-
-Jugador y crupier parten con 1000 fichas
-Apuesta mínima por turno: 50 fichas
-El jugador puede apostar la mínima, subir la apuesta o negarla
-Negar la apuesta bloquea el uso de todos los objetos ese turno
-El crupier tiene fondos ilimitados
-Al inicio de cada nuevo turno de apuestas el jugador recibe +25 fichas
-```
-### Tienda: 
-Puedes comprar y desbloquear cargas de los objetos usando el dinero ganado por medio de las apuestas.
-
-## Flujo de juego:
-```
-1. Inicio de partida
+3. Inicio de partida
    └── Se reparten 2 cartas a cada uno (1 oculta, 1 visible)
+       y las fichas (1000) y objetos se inicializan desde cero en memoria
 
-2. Fase de apuestas
-   ├── Apostar (mínimo 50 $)  →  objetos disponibles
+4. Fase de apuestas
+   ├── Apostar (mínimo 50 $)  →  objetos disponibles, y se puede comprar en la tienda
    └── Negar apuesta          →  objetos bloqueados ese turno
 
-3. Turno del jugador
+5. Turno del jugador
    ├── Pedir carta
    ├── Plantarse
-   └── Usar objeto (debe ser antes de pedir o plantarse)
+   └── Usar objeto
 
-4. Turno del crupier (automático)
-   ├── Pide carta si su puntaje < 17
-   └── Se planta si su puntaje ≥ 17
+6. Turno del rival
+   ├── Singleplayer: el CrupierBot pide carta si su puntaje < 17, se planta si ≥ 17
+   └── PvP: el otro jugador juega su turno igual que el paso 5
 
-5. Resolución
+7. Resolución
    └── El más cercano a 21 sin pasarse gana la ronda
-       ├── Ganador se lleva el pozo de apuestas
-       └── Se suma 1 victoria al contador del ganador
+       ├── Ganador se lleva el pozo de apuestas (fichas de esa partida)
+       └── Se suma 1 victoria al contador de rondas de esa partida
 
-6. Nueva ronda (repite desde paso 2)
-```
-### Condición de victoria:
-```
-Gana la partida completa quien llegue primero a 5 victorias.
+8. Nueva ronda (repite desde el paso 4) hasta que alguien llegue a 5 victorias
 
-Jugador 5 – Crupier 3 → Gana el jugador
-Jugador 5 – Crupier 0 → Gana el jugador
-Jugador 4 – Crupier 4 → Continúa (nadie llegó a 5)
-
-En caso de empate en una ronda (ambos con el mismo puntaje o ambos pasados de 21 con igual valor), la apuesta se anula y no se suma victoria a ninguno, si ambos jugadores superan el puntaje de 21, se le da la victoria al que este mas cerca del numero anterior mencionado.
-Al terminar la partida completa, el marcador, el dinero y los desbloqueos se reinician.
+9. Fin de partida
+   └── Se guarda en MongoDB solo el resultado final (modo, ganador, marcador, duración)
+       y se actualizan victorias/derrotas de la cuenta; las fichas y objetos de
+       esa partida se descartan por completo
 ```
+
+---
+
+## Condición de victoria
+
+Gana la partida completa quien llegue primero a 5 victorias de ronda.
+
+- Jugador 5 – Rival 3 → Gana el jugador
+- Jugador 5 – Rival 0 → Gana el jugador
+- Jugador 4 – Rival 4 → Continúa
+
+En caso de empate en una ronda, la apuesta se anula y no se suma victoria a ninguno. Si ambos jugadores superan 21, gana el más cercano al número.
+
+Al terminar la partida completa, el marcador, las fichas y los desbloqueos de objetos desaparecen junto con la partida — nunca se guardaron en la base de datos. Lo único que queda registrado es el resultado final (modo, ganador, marcador y duración) en la colección `Game`, y el conteo de victorias/derrotas en la cuenta del jugador.
