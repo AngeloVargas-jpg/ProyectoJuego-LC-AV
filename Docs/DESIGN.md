@@ -35,10 +35,13 @@ Elegimos este framework descartando React y Angular ya que existe una leve exper
 - **Node.js** — Entorno donde corre el servidor
 - **Express** — Herramienta para crear las rutas del servidor (los "caminos" por donde el frontend pide y envía información)
 - **Socket.io** — Comunicación en tiempo real para el modo multijugador
-- **MongoDB** — Base de datos donde se guardan las cuentas de usuario, el historial de partidas y las estadísticas
+
 - **Mongoose** — Librería que facilita escribir y leer datos en MongoDB desde Node.js
 - **JWT (token de identificación firmado)** — Una vez que el usuario inicia sesión con su usuario y contraseña, el servidor le entrega un token. El frontend lo guarda y lo manda en cada petición para probar que ya inició sesión, sin tener que volver a mandar la contraseña cada vez
 - **bcrypt** — Herramienta que encripta la contraseña antes de guardarla, así nadie puede verla en texto plano, ni siquiera revisando la base de datos
+
+### Base de datos
+- **MongoDB** — Base de datos donde se guardan las cuentas de usuario, el historial de partidas y las estadísticas
 
 ### Herramientas de desarrollo
 - **pnpm** — Gestor de paquetes
@@ -111,32 +114,21 @@ ProyectoJuego-LC-AV/
 │   └── router/
 │       └── index.js
 │
-└── server/                       ← Backend (Node.js + Express)
-    ├── index.js                  ← entrada del servidor
-    ├── socket.js                 ← lógica de Socket.io (salas, turnos, Singleplayer y PvP)
+└── server/             
+    ├── index.js             
+    ├── socket.js                
     │
     ├── routes/
-    │   ├── auth.routes.js        ← /api/auth/login, /api/auth/register, /api/auth/logout
-    │   └── user.routes.js        ← /api/user/profile, /api/user/stats
     │
     ├── controllers/
-    │   ├── auth.controller.js    ← lógica de login y registro
-    │   └── user.controller.js    ← lógica de perfil y estadísticas
     │
     ├── models/
-    │   ├── User.js               ← modelo de usuario en MongoDB (sin fichas ni objetos)
-    │   └── Game.js                ← historial de partidas terminadas en MongoDB
     │
-    ├── game/                      ← nuevo: lógica de una partida en curso (vive en memoria, no en Mongo)
-    │   ├── GameEngine.js          ← reparto, turnos, puntajes, fichas y objetos de la partida actual
-    │   ├── CrupierBot.js          ← IA del Crupier para el modo Singleplayer
-    │   └── Deck.js                ← mazo de cartas
+    ├── game/                     
     │
-    ├── data/                      ← nuevo: catálogo estático de objetos (no cambia entre partidas)
-    │   └── items.js               ← Pistola, Comodín, Copa de Vino, Jeringa, Encendedor, Puro
+    ├── data/                   
     │
     └── middleware/
-        └── auth.middleware.js    ← revisa que el token venga incluido y sea válido en cada petición protegida
 ```
 
 ---
