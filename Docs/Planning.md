@@ -90,7 +90,7 @@
 
 
 
-##### **Segunda Entrega** 
+##### **Segunda Entrega**
 
 
 
@@ -99,10 +99,10 @@
 |**Tarea**|**Estado**|
 |-|-|
 |Añadir Planning para Segunda Entrega|Completado|
-|Investigar y definir herramientas para backend|Pendiente|
-|Planificar y diseñar Sistema online player vs player|Pendiente|
-|Actualizar Planning.md|Pendiente|
-|Actualizar Planning definiendo tareas/objetivos|Pendiente|
+|Investigar y definir herramientas para backend|Completado|
+|Planificar y diseñar Sistema online player vs player|Completado|
+|Actualizar Planning.md|Completado|
+|Actualizar Planning definiendo tareas/objetivos|Completado|
 
 
 
@@ -116,12 +116,14 @@
 
 |**Tarea**|**Estado**|
 |-|-|
+|Actualizar Actions/workflow|**Completado**|
+|Diseño de base de datos|**Completado**|
 |Mejorar diseño de cartas|Pendiente|
 |Cambiar perspectiva de cámara/ Poner las cartas sobre la mesa|Pendiente|
 |Añadir botón de mute|Pendiente|
 |Mejorar interfaz y añadir/actualizar instrucciones en el juego|Pendiente|
 |Mejorar el sistema de mensajes/eventos|Pendiente|
-|Incorporar sistema de login/inicio de sesión (por confirmar)|Pendiente|
+|Implementación de perfil y estadísticas|Pendiente|
 
 
 
@@ -129,14 +131,17 @@
 
 
 
-**Tareas de Semana 3 y 2 serán añadidas una vez se complete la investigación y planificación de la semana 1**
+
 
 |**Tarea**|**Estado**|
 |-|-|
-|Actualizar Actions/workflow|Pendiente|
+|**Conexión de base de datos**|**Pendiente**|
+|**Conexión del login con el frontend**|Pendiente|
+|Implementación del Crupier en el servidor|Pendiente|
+|Implementación del motor de partida (control de fichas, turnos y objetos durante el juego)|Pendiente|
+|Implementación de multijugador con Socket.io|Pendiente|
+|Pruebas de gameplay multijugador|Pendiente|
 |Actualizar Readme|Pendiente|
-
-
 
 
 

@@ -32,14 +32,13 @@ Elegimos este framework descartando React y Angular ya que existe una leve exper
 - **Socket.io-client** — Comunicación en tiempo real con el servidor
 
 ### Backend
-- **Node.js** — Entorno de ejecución del servidor
-- **Express** — Framework para construir la API REST
+- **Node.js** — Entorno donde corre el servidor
+- **Express** — Herramienta para crear las rutas del servidor (los "caminos" por donde el frontend pide y envía información)
 - **Socket.io** — Comunicación en tiempo real para el modo multijugador
-- **MongoDB** — Base de datos NoSQL para persistir cuentas de usuario, historial de partidas y estadísticas
-- **Mongoose** — ODM para modelar los datos de MongoDB en Node.js
-- **JWT (JSON Web Token)** — Autenticación stateless del usuario
-- **bcrypt** — Encriptación de contraseñas antes de guardarlas en la base de datos
-- **cookie-parser** — Manejo de cookies httpOnly para guardar el token JWT de forma segura
+- **MongoDB** — Base de datos donde se guardan las cuentas de usuario, el historial de partidas y las estadísticas
+- **Mongoose** — Librería que facilita escribir y leer datos en MongoDB desde Node.js
+- **JWT (token de identificación firmado)** — Una vez que el usuario inicia sesión con su usuario y contraseña, el servidor le entrega un token. El frontend lo guarda y lo manda en cada petición para probar que ya inició sesión, sin tener que volver a mandar la contraseña cada vez
+- **bcrypt** — Herramienta que encripta la contraseña antes de guardarla, así nadie puede verla en texto plano, ni siquiera revisando la base de datos
 
 ### Herramientas de desarrollo
 - **pnpm** — Gestor de paquetes
@@ -137,19 +136,19 @@ ProyectoJuego-LC-AV/
     │   └── items.js               ← Pistola, Comodín, Copa de Vino, Jeringa, Encendedor, Puro
     │
     └── middleware/
-        └── auth.middleware.js    ← verifica el JWT en cada petición protegida
+        └── auth.middleware.js    ← revisa que el token venga incluido y sea válido en cada petición protegida
 ```
 
 ---
 
-## Endpoints de la API
+## Rutas del servidor
 
 ### Autenticación (`/api/auth`)
 | Método | Endpoint | Descripción |
 |--------|----------|-------------|
 | POST | `/api/auth/register` | Registra un nuevo usuario |
-| POST | `/api/auth/login` | Inicia sesión, devuelve JWT en cookie httpOnly |
-| POST | `/api/auth/logout` | Cierra sesión, elimina la cookie |
+| POST | `/api/auth/login` | Inicia sesión, devuelve un token que el frontend debe guardar y enviar en las siguientes peticiones |
+| POST | `/api/auth/logout` | Cierra sesión (el frontend simplemente descarta el token guardado) |
 
 ### Usuario (`/api/user`)
 | Método | Endpoint | Descripción |
@@ -157,20 +156,24 @@ ProyectoJuego-LC-AV/
 | GET | `/api/user/profile` | Devuelve datos del usuario autenticado |
 | GET | `/api/user/stats` | Devuelve victorias y derrotas totales acumuladas en su historial |
 
-> No existen endpoints REST para fichas, objetos ni tienda: todo eso ocurre dentro de una partida en curso a través de Socket.io (ver más abajo), porque es estado temporal que no necesita guardarse.
+> No existen rutas separadas para fichas, objetos ni tienda: todo eso ocurre dentro de una partida en curso a través de Socket.io (ver más abajo), porque es estado temporal que no necesita guardarse.
 
 ---
 
-## Autenticación: JWT + Cookie httpOnly
+## Autenticación: usuario, contraseña y token
+
+La idea central es que el usuario se protege únicamente con su usuario y contraseña; el token es solo el método que usan el frontend y el servidor para comunicarse después de ese inicio de sesión, no un segundo método de protección.
 
 El flujo de autenticación funciona así:
 
-1. El usuario manda usuario y contraseña a `POST /api/auth/login`
-2. El servidor verifica la contraseña con **bcrypt**
-3. Si es correcta, genera un **JWT** firmado con una clave secreta
-4. El JWT se guarda en una **cookie httpOnly** — el navegador la manda automáticamente en cada petición pero el código JS no puede leerla, protegiéndola contra ataques XSS
-5. En cada petición protegida, el **middleware** verifica que el JWT sea válido
-6. Al hacer logout, el servidor elimina la cookie
+1. El usuario manda su usuario y contraseña a `POST /api/auth/login`
+2. El servidor revisa la contraseña con **bcrypt** (comparándola con la versión encriptada que se guardó al registrarse)
+3. Si la contraseña es correcta, el servidor genera un **token** firmado con una clave secreta y lo devuelve en la respuesta
+4. El frontend guarda ese token en memoria (en el estado de la aplicación) y lo manda en cada petición protegida, dentro de la cabecera `Authorization` (por ejemplo: `Authorization: Bearer <token>`)
+5. En cada petición protegida, el **middleware** revisa esa cabecera y verifica que el token sea válido antes de dejar pasar la petición
+6. Al hacer logout, el frontend simplemente borra el token guardado; no hay nada que el servidor tenga que eliminar, porque el token no se guarda en una cookie
+
+> Importante: el token no reemplaza la protección por contraseña, solo evita que el usuario tenga que escribir su contraseña en cada petición. La seguridad de la cuenta sigue dependiendo de que la contraseña esté bien protegida (por eso se encripta con bcrypt) y de que el token tenga una duración limitada.
 
 ---
 
