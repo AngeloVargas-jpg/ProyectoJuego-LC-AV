@@ -49,12 +49,45 @@ jobs:
       - name: Build
         run: pnpm build
 
-  # ── Job 2: CD ──────────────────────────────────────────────────────────────
+  # ── Job 2: Backend ───────────────────────────────────────────────────────────
+  # Corre los tests del backend (con MongoDB simulado, sin conectarse a una base real)
+  backend-tests:
+    name: Tests del Backend
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Descarga el código del repo
+      - name: Checkout código
+        uses: actions/checkout@v4
+
+      # 2. Instala Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      # 3. Instala pnpm
+      - name: Instala pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 10
+
+      # 4. Instala dependencias
+      - name: Instala dependencias
+        run: pnpm install
+
+      # 5. Tests del backend
+      #    --passWithNoTests evita que falle mientras aún no hay archivos de test;
+      #    apenas agreguen el primer test, empieza a correr de verdad
+      - name: Tests del backend
+        run: pnpm test:server
+
+  # ── Job 3: CD ──────────────────────────────────────────────────────────────
   # Solo corre en push a main (no en PRs ni en develop)
   cd:
     name: Build y Push imagen Docker
     runs-on: ubuntu-latest
-    needs: ci                          # Espera que el CI pase antes de deployar
+    needs: [ci, backend-tests]         # Espera que el CI y los tests de backend pasen antes de deployar
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
 
     steps:
