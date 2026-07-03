@@ -1,0 +1,137 @@
+name: CI / CD — Lint, Test, Build y Deploy
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+jobs:
+  # ── Job 1: CI ──────────────────────────────────────────────────────────────
+  ci:
+    name: Lint, Test y Build
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Descarga el código del repo
+      - name: Checkout código
+        uses: actions/checkout@v4
+
+      # 2. Instala Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      # 3. Instala pnpm
+      - name: Instala pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 10
+
+      # 4. Instala dependencias
+      - name: Instala dependencias
+        run: pnpm install
+
+      # 5. Linter — revisa errores de código
+      - name: ESLint
+        run: pnpm eslint src --ext .js,.vue
+
+      # 6. Formatter — verifica formato
+      - name: Prettier
+        run: pnpm prettier --check src
+
+      # 7. Tests — corre los tests
+      - name: Tests
+        run: pnpm vitest run
+
+      # 8. Build — verifica que compila sin errores
+      - name: Build
+        run: pnpm build
+
+  # ── Job 2: Backend ───────────────────────────────────────────────────────────
+  # Corre los tests del backend (con MongoDB simulado, sin conectarse a una base real)
+  backend-tests:
+    name: Tests del Backend
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Descarga el código del repo
+      - name: Checkout código
+        uses: actions/checkout@v4
+
+      # 2. Instala Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      # 3. Instala pnpm
+      - name: Instala pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 10
+
+      # 4. Instala dependencias
+      - name: Instala dependencias
+        run: pnpm install
+
+      # 5. Tests del backend
+      #    --passWithNoTests evita que falle mientras aún no hay archivos de test;
+      #    apenas agreguen el primer test, empieza a correr de verdad
+      - name: Tests del backend
+        run: pnpm test:server
+
+  # ── Job 3: CD ──────────────────────────────────────────────────────────────
+  # Solo corre en push a main (no en PRs ni en develop)
+  cd:
+    name: Build y Push imagen Docker
+    runs-on: ubuntu-latest
+    needs: [ci, backend-tests]         # Espera que el CI y los tests de backend pasen antes de deployar
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+
+    steps:
+      # 1. Descarga el código
+      - name: Checkout código
+        uses: actions/checkout@v4
+
+      # 2. Configura QEMU para soporte multi-arquitectura (opcional pero recomendado)
+      - name: Setup QEMU
+        uses: docker/setup-qemu-action@v3
+
+      # 3. Configura Docker Buildx (builder avanzado con caché)
+      - name: Setup Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      # 4. Login en Docker Hub
+      #    Requiere los secrets: DOCKERHUB_USERNAME y DOCKERHUB_TOKEN
+      #    (Settings → Secrets and variables → Actions)
+      - name: Login en Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      # 5. Extrae metadata para taggear la imagen automáticamente
+      #    Genera tags como: latest, sha-abc1234
+      - name: Extrae metadata (tags)
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ secrets.DOCKERHUB_USERNAME }}/proyectojuego-lc-av
+          tags: |
+            type=raw,value=latest
+            type=sha,prefix=sha-,format=short
+
+      # 6. Build y Push de la imagen
+      - name: Build y Push
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./dockerfile
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          # Caché entre runs para builds más rápidos
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
