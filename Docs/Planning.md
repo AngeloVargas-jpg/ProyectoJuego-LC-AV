@@ -118,12 +118,12 @@
 |-|-|
 |Actualizar Actions/workflow|**Completado**|
 |Diseño de base de datos|**Completado**|
-|Mejorar diseño de cartas|Pendiente|
-|Cambiar perspectiva de cámara/ Poner las cartas sobre la mesa|Pendiente|
-|Añadir botón de mute|Pendiente|
-|Mejorar interfaz y añadir/actualizar instrucciones en el juego|Pendiente|
-|Mejorar el sistema de mensajes/eventos|Pendiente|
-|Implementación de perfil y estadísticas|Pendiente|
+|Mejorar diseño de cartas|Completado|
+|Cambiar perspectiva de cámara/ Poner las cartas sobre la mesa|No se hizo| # Errores en el cambio de camara del jugador
+|Añadir botón de mute|Completado|
+|Mejorar interfaz y añadir/actualizar instrucciones en el juego|Completado|
+|Mejorar el sistema de mensajes/eventos|Completado|
+|Implementación de perfil y estadísticas|Completado|
 
 
 
@@ -135,13 +135,14 @@
 
 |**Tarea**|**Estado**|
 |-|-|
-|**Conexión de base de datos**|**Pendiente**|
-|**Conexión del login con el frontend**|Pendiente|
-|Implementación del Crupier en el servidor|Pendiente|
-|Implementación del motor de partida (control de fichas, turnos y objetos durante el juego)|Pendiente|
-|Implementación de multijugador con Socket.io|Pendiente|
-|Pruebas de gameplay multijugador|Pendiente|
-|Actualizar Readme|Pendiente|
+|**Conexión de base de datos**|**Completado**|
+|**Conexión del login con el frontend**|No completado| # Mala organizacion de implementacion y tiempos
+|Implementación del Crupier en el servidor|Completado|
+|Implementación del motor de partida (control de fichas, turnos y objetos durante el juego)|Completado|
+|Implementación de multijugador con Socket.io|No completado| # Mala organizacion de implementacion y tiempos
+|Pruebas de gameplay multijugador|No completado|
+|Actualizar Readme|No completado| # Mala organizacion de tiempos
 
-
+Nota Final: No fue posible consolidar adecuadamente las ideas ni alcanzar el resultado esperado del proyecto debido a deficiencias en la implementación,
+la organización de las tareas, la gestión de los tiempos y otros aspectos relacionados con el desarrollo.
 
