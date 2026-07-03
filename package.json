@@ -32,7 +32,10 @@
     "eslint-plugin-vue": "^10.9.1",
     "jsdom": "^29.1.1",
     "prettier": "^3.8.3",
+<<<<<<< HEAD
     "socket.io-client": "^4.8.3",
+=======
+>>>>>>> d593137cd941e4a3fa8ece548096203d2b2eecc5
     "vite": "^8.0.10",
     "vitest": "^4.1.7"
   }

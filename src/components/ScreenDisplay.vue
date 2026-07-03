@@ -32,6 +32,7 @@
       <button class="screen__btn screen__btn--usar" @click="abrirObjetos">▶ USAR OBJETOS</button>
       <div class="divider"></div>
       <div class="obj-grid">
+<<<<<<< HEAD
         <span class="line line--obj" :class="{ 'line--obj-active': store.objetos.pistola.balas.value > 0 }">
           PISTOLA: {{ store.objetos.pistola.balas.value }}
         </span>
@@ -50,6 +51,14 @@
         <span class="line line--obj" :class="{ 'line--obj-active': store.objetos.puro.cargas.value > 0 }">
           PURO: {{ store.objetos.puro.cargas.value }}
         </span>
+=======
+        <span class="line line--obj">PISTOLA: {{ store.objetos.pistola.balas.value }}</span>
+        <span class="line line--obj">JERINGA: 0</span>
+        <span class="line line--obj">COPA: {{ store.objetos.copa.cargas.value }}</span>
+        <span class="line line--obj">ENCEND: 0</span>
+        <span class="line line--obj">COMODIN: {{ store.objetos.comoDin.disponible.value }}</span>
+        <span class="line line--obj">PURO: 0</span>
+>>>>>>> d593137cd941e4a3fa8ece548096203d2b2eecc5
       </div>
     </div>
   </div>
@@ -64,18 +73,22 @@
       <p class="line line--label">PUNTAJES</p>
       <p class="line line--data">CRUPIER: {{ store.dealerVisibleScore }}</p>
       <p class="line line--data" :class="{ 'line--bust': store.playerScore > 21 }">TU: {{ store.playerScore }}</p>
+<<<<<<< HEAD
       <div class="divider"></div>
       <!-- BOTÓN STATS (solo del juego, perfil va en menú) -->
       <button class="mute-btn mute-btn--stats" @click="abrirStats">
         <span class="mute-icon">📊</span>
         <span class="mute-label">ESTADÍSTICAS</span>
       </button>
+=======
+>>>>>>> d593137cd941e4a3fa8ece548096203d2b2eecc5
     </div>
   </div>
 
   <!-- ══ MODALES ══ -->
   <ObjetosModal :visible="modalObjetos" @close="modalObjetos = false" />
   <TiendaModal :visible="modalTienda" @close="modalTienda = false" />
+<<<<<<< HEAD
 
   <!-- ══ MODAL ESTADÍSTICAS / PERFIL ══ -->
   <Teleport to="body">
@@ -206,17 +219,32 @@
 
 <script setup>
   import { computed, ref, watch, nextTick, onMounted } from 'vue'
+=======
+</template>
+
+<script setup>
+  import { computed, ref } from 'vue'
+>>>>>>> d593137cd941e4a3fa8ece548096203d2b2eecc5
   import { useGameStore } from '@/store/gameStore'
   import ObjetosModal from '@/components/ObjetosModal.vue'
   import TiendaModal from '@/components/TiendaModal.vue'
 
+<<<<<<< HEAD
   const props = defineProps({
     side: { type: String, default: 'left' },
+=======
+  defineProps({
+    side: {
+      type: String,
+      default: 'left',
+    },
+>>>>>>> d593137cd941e4a3fa8ece548096203d2b2eecc5
   })
 
   const store = useGameStore()
   const modalObjetos = ref(false)
   const modalTienda = ref(false)
+<<<<<<< HEAD
   const modalStats = ref(false)
 
   // ── PERFIL / ALIAS ──
@@ -349,6 +377,30 @@
   function abrirObjetos() { modalObjetos.value = true }
   function abrirTienda() { modalTienda.value = true }
   function abrirStats() { modalStats.value = true }
+=======
+
+  const faseTexto = computed(() => {
+    switch (store.faseJuego) {
+      case 'apuestas':
+        return 'APUESTAS'
+      case 'turnoJugador':
+        return 'TU TURNO'
+      case 'turnoCrupier':
+        return 'TRN CRUPIER'
+      case 'resultado':
+        return 'RESULTADO'
+      default:
+        return store.faseJuego.toUpperCase()
+    }
+  })
+
+  function abrirObjetos() {
+    modalObjetos.value = true
+  }
+  function abrirTienda() {
+    modalTienda.value = true
+  }
+>>>>>>> d593137cd941e4a3fa8ece548096203d2b2eecc5
 </script>
 
 <style scoped>
@@ -390,7 +442,11 @@
     left: 1070px;
     top: 170px;
     width: 185px;
+<<<<<<< HEAD
     height: 230px;
+=======
+    height: 200px;
+>>>>>>> d593137cd941e4a3fa8ece548096203d2b2eecc5
     transform: rotate(-0.5deg);
     transform-origin: left top;
   }
@@ -449,7 +505,13 @@
   .line--score {
     font-size: 0.8rem;
     color: #ff3300;
+<<<<<<< HEAD
     text-shadow: 0 0 8px rgba(255, 51, 0, 1), 0 0 20px rgba(255, 51, 0, 0.5);
+=======
+    text-shadow:
+      0 0 8px rgba(255, 51, 0, 1),
+      0 0 20px rgba(255, 51, 0, 0.5);
+>>>>>>> d593137cd941e4a3fa8ece548096203d2b2eecc5
     letter-spacing: 3px;
   }
 
@@ -477,13 +539,20 @@
   .line--fase {
     font-size: 0.88rem;
     color: #ff4400;
+<<<<<<< HEAD
     text-shadow: 0 0 8px rgba(255, 68, 0, 0.9), 0 0 20px rgba(255, 68, 0, 0.4);
+=======
+    text-shadow:
+      0 0 8px rgba(255, 68, 0, 0.9),
+      0 0 20px rgba(255, 68, 0, 0.4);
+>>>>>>> d593137cd941e4a3fa8ece548096203d2b2eecc5
     letter-spacing: 1px;
     animation: flicker 2.5s infinite;
   }
 
   .line--obj {
     font-size: 0.55rem;
+<<<<<<< HEAD
     color: #882200;
     text-shadow: 0 0 4px rgba(140, 34, 0, 0.5);
     text-align: left;
@@ -495,6 +564,12 @@
     color: #ff5500 !important;
     text-shadow: 0 0 6px rgba(255, 85, 0, 0.9) !important;
     font-weight: bold;
+=======
+    color: #cc3300;
+    text-shadow: 0 0 4px rgba(200, 51, 0, 0.7);
+    text-align: left;
+    white-space: nowrap;
+>>>>>>> d593137cd941e4a3fa8ece548096203d2b2eecc5
   }
 
   .line--bust {
@@ -534,7 +609,14 @@
     flex-shrink: 0;
   }
 
+<<<<<<< HEAD
   .screen__btn--usar { width: 100%; text-align: left; }
+=======
+  .screen__btn--usar {
+    width: 100%;
+    text-align: left;
+  }
+>>>>>>> d593137cd941e4a3fa8ece548096203d2b2eecc5
 
   .screen__btn:hover {
     background: rgba(120, 20, 0, 0.85);
@@ -542,6 +624,7 @@
     box-shadow: 0 0 8px rgba(255, 85, 0, 0.4);
   }
 
+<<<<<<< HEAD
   /* ── BOTÓN MUTE ── */
   .mute-btn {
     display: flex;
@@ -806,5 +889,19 @@
   @keyframes flicker {
     0%, 89%, 91%, 93%, 100% { opacity: 1; }
     90%, 92% { opacity: 0.4; }
+=======
+  @keyframes flicker {
+    0%,
+    89%,
+    91%,
+    93%,
+    100% {
+      opacity: 1;
+    }
+    90%,
+    92% {
+      opacity: 0.4;
+    }
+>>>>>>> d593137cd941e4a3fa8ece548096203d2b2eecc5
   }
 </style>

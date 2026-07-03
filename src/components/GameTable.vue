@@ -1,5 +1,6 @@
 <template>
   <div class="game">
+<<<<<<< HEAD
     <!-- ZONA CRUPIER -->
     <div class="zone zone--dealer">
       <div class="cards-row cards-row--dealer">
@@ -27,10 +28,23 @@
         <span class="obj-msg__icon">▌</span>
         <span class="obj-msg__text">{{ store.objetoMensaje }}</span>
       </div>
+=======
+    <!-- ZONA CRUPIER: sin score tag, el puntaje va en el monitor -->
+    <div class="zone zone--dealer">
+      <div class="cards-row">
+        <Card v-for="(card, i) in store.dealerHand" :key="i" :card="card" :dealer="true" :style="{ '--r': (i - store.dealerHand.length / 2) * 4 }" />
+      </div>
+    </div>
+
+    <!-- Mensaje objeto -->
+    <transition name="fade">
+      <div v-if="store.objetoMensaje" class="obj-msg">▌ {{ store.objetoMensaje }}</div>
+>>>>>>> d593137cd941e4a3fa8ece548096203d2b2eecc5
     </transition>
 
     <!-- ZONA JUGADOR -->
     <div class="zone zone--player">
+<<<<<<< HEAD
       <div class="cards-row cards-row--player">
         <Card
           v-for="(card, i) in store.playerHand"
@@ -42,6 +56,10 @@
           }"
           class="card-on-table card-on-table--player"
         />
+=======
+      <div class="cards-row">
+        <Card v-for="(card, i) in store.playerHand" :key="i" :card="card" :style="{ '--r': (i - store.playerHand.length / 2) * 5 }" />
+>>>>>>> d593137cd941e4a3fa8ece548096203d2b2eecc5
       </div>
     </div>
 
@@ -79,6 +97,7 @@
     pointer-events: auto;
   }
 
+<<<<<<< HEAD
   /* ── Dealer: cartas en perspectiva leve ── */
   .zone--dealer {
     top: 298px;
@@ -91,6 +110,17 @@
   /* ── Jugador: cartas más abajo, sin perspectiva ── */
   .zone--player {
     top: 448px;
+=======
+  .zone--dealer {
+    top: 330px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 5;
+  }
+
+  .zone--player {
+    top: 460px;
+>>>>>>> d593137cd941e4a3fa8ece548096203d2b2eecc5
     left: 50%;
     transform: translateX(-50%);
     z-index: 5;
@@ -98,6 +128,7 @@
 
   .cards-row {
     display: flex;
+<<<<<<< HEAD
     gap: 8px;
     justify-content: center;
     align-items: flex-end;
@@ -137,6 +168,16 @@
     background: linear-gradient(90deg, transparent, rgba(180, 130, 60, 0.35), rgba(220, 160, 80, 0.55), rgba(180, 130, 60, 0.35), transparent);
     box-shadow: 0 0 8px rgba(180, 130, 60, 0.2);
     pointer-events: none;
+=======
+    gap: 10px;
+    justify-content: center;
+    align-items: flex-end;
+    min-height: 100px;
+  }
+
+  .cards-row .card {
+    transform: rotate(calc(var(--r, 0) * 1deg));
+>>>>>>> d593137cd941e4a3fa8ece548096203d2b2eecc5
   }
 
   .ui-anchor {
@@ -147,6 +188,7 @@
     pointer-events: auto;
   }
 
+<<<<<<< HEAD
   /* ── Mensaje objeto mejorado ── */
   .obj-msg {
     position: absolute;
@@ -198,5 +240,32 @@
   .slide-msg-leave-to {
     opacity: 0;
     transform: translateX(-50%) translateY(10px);
+=======
+  .obj-msg {
+    position: absolute;
+    top: 430px;
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    font-family: 'Courier New', monospace;
+    font-size: 0.75rem;
+    color: #ffcc80;
+    background: rgba(0, 0, 0, 0.85);
+    border: 1px solid rgba(200, 100, 0, 0.5);
+    border-left: 3px solid #cc6600;
+    padding: 6px 18px;
+    pointer-events: none;
+    z-index: 30;
+    text-shadow: 0 0 8px rgba(255, 180, 60, 0.7);
+  }
+
+  .fade-enter-active,
+  .fade-leave-active {
+    transition: opacity 0.3s;
+  }
+  .fade-enter-from,
+  .fade-leave-to {
+    opacity: 0;
+>>>>>>> d593137cd941e4a3fa8ece548096203d2b2eecc5
   }
 </style>

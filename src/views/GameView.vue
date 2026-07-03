@@ -25,6 +25,7 @@
   const vpH = ref(0)
   const store = useGameStore()
 
+<<<<<<< HEAD
   // ── AUDIO DEL JUEGO ──
   let audioCtx = null
   let bgNodes = []
@@ -88,6 +89,10 @@
   }
 
   function updateSize() {
+=======
+  function updateSize() {
+    // Usar 100vw/100vh reales sin scrollbar
+>>>>>>> d593137cd941e4a3fa8ece548096203d2b2eecc5
     vpW.value = window.visualViewport ? window.visualViewport.width : document.documentElement.clientWidth
     vpH.value = window.visualViewport ? window.visualViewport.height : document.documentElement.clientHeight
   }
@@ -96,6 +101,7 @@
     updateSize()
     window.addEventListener('resize', updateSize)
     if (window.visualViewport) window.visualViewport.addEventListener('resize', updateSize)
+<<<<<<< HEAD
     window.addEventListener('game-mute-toggle', handleMuteToggle)
     store.startGame()
     // Iniciar audio al primer click del usuario
@@ -104,13 +110,19 @@
       document.removeEventListener('click', startAudio)
     }
     document.addEventListener('click', startAudio)
+=======
+    store.startGame()
+>>>>>>> d593137cd941e4a3fa8ece548096203d2b2eecc5
   })
 
   onUnmounted(() => {
     window.removeEventListener('resize', updateSize)
     if (window.visualViewport) window.visualViewport.removeEventListener('resize', updateSize)
+<<<<<<< HEAD
     window.removeEventListener('game-mute-toggle', handleMuteToggle)
     stopGameAudio()
+=======
+>>>>>>> d593137cd941e4a3fa8ece548096203d2b2eecc5
   })
 
   const scale = computed(() => {

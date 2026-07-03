@@ -2,6 +2,7 @@
   <div class="ui">
     <!-- ══ FASE: APUESTAS ══ -->
     <div v-if="store.faseJuego === 'apuestas'" class="ui__panel ui__panel--bet">
+<<<<<<< HEAD
       <span class="ui__label">TURNO_{{ String(store.turnoNumero).padStart(2, '0') }} // APUESTA</span>
 
       <div class="ui__bet-row">
@@ -10,6 +11,14 @@
         <button class="ui__chip" :class="{ 'ui__chip--active': betAmount === 200 }" @click="onChip200">200</button>
         <button class="ui__chip ui__chip--half" @click="onChipHalf">½</button>
         <button class="ui__chip ui__chip--all" @click="onChipAll">ALL</button>
+=======
+      <span class="ui__label"> TURNO_{{ String(store.turnoNumero).padStart(2, '0') }} // APUESTA </span>
+
+      <div class="ui__bet-row">
+        <button class="ui__chip" @click="onChip50">50</button>
+        <button class="ui__chip" @click="onChip100">100</button>
+        <button class="ui__chip" @click="onChip200">200</button>
+>>>>>>> d593137cd941e4a3fa8ece548096203d2b2eecc5
 
         <input v-model.number="betAmount" type="number" :min="store.apuestaMinima" :max="store.dineroJugador" class="ui__input" />
 
@@ -17,15 +26,21 @@
         <button class="ui__btn ui__btn--deny" @click="onNegar">✕ NEGAR</button>
       </div>
 
+<<<<<<< HEAD
       <div class="ui__hints-row">
         <span v-if="!canBet && betAmount < store.apuestaMinima" class="ui__hint">MÍN: {{ store.apuestaMinima }} $</span>
         <span v-else-if="!canBet" class="ui__hint">FONDOS INSUFICIENTES</span>
         <span class="ui__tip">💡 NEGAR bloquea objetos pero conserva fichas</span>
       </div>
+=======
+      <span v-if="!canBet && betAmount < store.apuestaMinima" class="ui__hint"> MÍN: {{ store.apuestaMinima }} $ </span>
+      <span v-else-if="!canBet" class="ui__hint"> FONDOS INSUFICIENTES </span>
+>>>>>>> d593137cd941e4a3fa8ece548096203d2b2eecc5
     </div>
 
     <!-- ══ TURNO JUGADOR ══ -->
     <div v-else-if="store.faseJuego === 'turnoJugador'" class="ui__panel ui__panel--turn">
+<<<<<<< HEAD
       <div class="ui__turn-actions">
         <button class="ui__btn ui__btn--hit" :disabled="store.gameOver" @click="onHit">
           <span class="btn-icon">▶</span>
@@ -56,19 +71,29 @@
         <span v-else-if="store.playerScore >= 17" class="tip--ok">Zona segura. Plantarse es arriesgado pero viable.</span>
         <span v-else class="tip--info">Bajo riesgo de pasarse. Considera pedir otra carta.</span>
       </div>
+=======
+      <button class="ui__btn ui__btn--hit" :disabled="store.gameOver" @click="onHit">▶ PEDIR CARTA</button>
+      <button class="ui__btn ui__btn--stand" :disabled="store.gameOver" @click="onStand">■ PLANTARSE</button>
+      <span v-if="store.jugadorNego" class="ui__warn"> ⚠ OBJETOS BLOQUEADOS </span>
+>>>>>>> d593137cd941e4a3fa8ece548096203d2b2eecc5
     </div>
 
     <!-- ══ TURNO CRUPIER ══ -->
     <div v-else-if="store.faseJuego === 'turnoCrupier'" class="ui__panel ui__panel--dealer">
+<<<<<<< HEAD
       <div class="dealer-processing">
         <span class="dealer-dot" v-for="n in 3" :key="n" :style="{ animationDelay: `${n * 0.2}s` }">▌</span>
         <span class="ui__label ui__label--blink">PROCESANDO TURNO DEL CRUPIER</span>
         <span class="dealer-dot" v-for="n in 3" :key="`r${n}`" :style="{ animationDelay: `${n * 0.2 + 0.6}s` }">▌</span>
       </div>
+=======
+      <span class="ui__label ui__label--blink"> ▌ PROCESANDO TURNO DEL CRUPIER... </span>
+>>>>>>> d593137cd941e4a3fa8ece548096203d2b2eecc5
     </div>
 
     <!-- ══ RESULTADO ══ -->
     <div v-else-if="store.faseJuego === 'resultado' || store.gameOver" class="ui__panel ui__panel--result">
+<<<<<<< HEAD
       <div class="result-content">
         <span class="ui__result-icon">{{ resultIcon }}</span>
         <span class="ui__result-msg">{{ store.message }}</span>
@@ -79,10 +104,15 @@
         </div>
         <button class="ui__btn ui__btn--restart" @click="onRestart">↺ NUEVA PARTIDA</button>
       </div>
+=======
+      <span class="ui__result-msg">{{ store.message }}</span>
+      <button class="ui__btn ui__btn--restart" @click="onRestart">↺ NUEVA PARTIDA</button>
+>>>>>>> d593137cd941e4a3fa8ece548096203d2b2eecc5
     </div>
 
     <!-- HUD -->
     <div class="ui__hud">
+<<<<<<< HEAD
       <span class="ui__hud-item">
         💰 <strong>{{ store.dineroJugador }}</strong> $
       </span>
@@ -95,6 +125,11 @@
       <span class="ui__hud-item ui__hud-item--turn">
         T{{ String(store.turnoNumero).padStart(2, '0') }}
       </span>
+=======
+      <span class="ui__hud-item"> 💰 {{ store.dineroJugador }} $ </span>
+      <span v-if="store.apuestaJugador > 0" class="ui__hud-item ui__hud-item--bet"> BET: {{ store.apuestaJugador }} $ </span>
+      <span class="ui__hud-item ui__hud-item--wins"> W: {{ store.victoriasJugador }} / L: {{ store.victoriasCrupier }} </span>
+>>>>>>> d593137cd941e4a3fa8ece548096203d2b2eecc5
     </div>
   </div>
 </template>
@@ -108,6 +143,7 @@
 
   const canBet = computed(() => betAmount.value >= store.apuestaMinima && betAmount.value <= store.dineroJugador)
 
+<<<<<<< HEAD
   const resultIcon = computed(() => {
     if (!store.message) return '?'
     const msg = store.message.toLowerCase()
@@ -130,11 +166,58 @@
   function onRestart() { store.startGame() }
 
   onMounted(() => { store.startGame() })
+=======
+  function setPreset(n) {
+    betAmount.value = n
+  }
+
+  function placeBet() {
+    if (!canBet.value) return
+    store.hacerApuesta(betAmount.value)
+  }
+
+  function onChip50() {
+    setPreset(50)
+  }
+
+  function onChip100() {
+    setPreset(100)
+  }
+
+  function onChip200() {
+    setPreset(200)
+  }
+
+  function onApostar() {
+    placeBet()
+  }
+
+  function onNegar() {
+    store.negarApuesta()
+  }
+
+  function onHit() {
+    store.playerHit()
+  }
+
+  function onStand() {
+    store.playerStand()
+  }
+
+  function onRestart() {
+    store.startGame()
+  }
+
+  onMounted(() => {
+    store.startGame()
+  })
+>>>>>>> d593137cd941e4a3fa8ece548096203d2b2eecc5
 </script>
 
 <style scoped>
   .ui {
     width: 100%;
+<<<<<<< HEAD
     background: rgba(6, 3, 1, 0.94);
     border-top: 2px solid #3d2810;
     border-left: 2px solid #3d2810;
@@ -145,13 +228,28 @@
     gap: 8px;
     box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.8);
     position: relative;
+=======
+    background: rgba(8, 4, 2, 0.92);
+    border-top: 2px solid #3d2810;
+    border-left: 2px solid #3d2810;
+    border-right: 2px solid #3d2810;
+    padding: 12px 20px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    box-shadow: 0 -6px 20px rgba(0, 0, 0, 0.7);
+>>>>>>> d593137cd941e4a3fa8ece548096203d2b2eecc5
   }
 
   .ui__panel {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
+<<<<<<< HEAD
     gap: 8px;
+=======
+    gap: 10px;
+>>>>>>> d593137cd941e4a3fa8ece548096203d2b2eecc5
     justify-content: center;
   }
 
@@ -159,7 +257,11 @@
     width: 100%;
     text-align: center;
     font-family: 'Share Tech Mono', monospace;
+<<<<<<< HEAD
     font-size: 0.7rem;
+=======
+    font-size: 0.72rem;
+>>>>>>> d593137cd941e4a3fa8ece548096203d2b2eecc5
     color: #aa4040;
     letter-spacing: 3px;
     text-transform: uppercase;
@@ -167,16 +269,27 @@
   }
 
   .ui__label--blink {
+<<<<<<< HEAD
     animation: flicker 1.2s infinite;
+=======
+    animation: flicker 1.5s infinite;
+>>>>>>> d593137cd941e4a3fa8ece548096203d2b2eecc5
     color: #ff3030;
     text-shadow: 0 0 10px rgba(255, 48, 48, 0.9);
   }
 
+<<<<<<< HEAD
   /* ── BET ROW ── */
   .ui__bet-row {
     display: flex;
     align-items: center;
     gap: 7px;
+=======
+  .ui__bet-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+>>>>>>> d593137cd941e4a3fa8ece548096203d2b2eecc5
     flex-wrap: wrap;
     justify-content: center;
   }
@@ -189,6 +302,7 @@
     border: 3px solid #8b5e3c;
     color: #d4820a;
     font-family: 'Share Tech Mono', monospace;
+<<<<<<< HEAD
     font-size: 0.72rem;
     font-weight: bold;
     cursor: pointer;
@@ -226,6 +340,27 @@
 
   .ui__input {
     width: 78px;
+=======
+    font-size: 0.75rem;
+    font-weight: bold;
+    cursor: pointer;
+    text-shadow: 0 0 6px rgba(212, 130, 10, 0.8);
+    box-shadow:
+      0 3px 8px rgba(0, 0, 0, 0.6),
+      inset 0 1px 0 rgba(255, 200, 100, 0.15);
+    transition: all 0.15s;
+  }
+
+  .ui__chip:hover {
+    transform: translateY(-2px);
+    box-shadow:
+      0 6px 12px rgba(0, 0, 0, 0.7),
+      0 0 10px rgba(212, 130, 10, 0.4);
+  }
+
+  .ui__input {
+    width: 80px;
+>>>>>>> d593137cd941e4a3fa8ece548096203d2b2eecc5
     padding: 8px;
     background: #050202;
     border: 1px solid #8b0000;
@@ -238,6 +373,7 @@
     box-shadow: inset 0 0 10px rgba(139, 0, 0, 0.3);
   }
 
+<<<<<<< HEAD
   .ui__input::-webkit-inner-spin-button { -webkit-appearance: none; }
 
   .ui__input:focus {
@@ -381,10 +517,27 @@
   .ui__btn {
     font-family: 'Share Tech Mono', monospace;
     font-size: 0.75rem;
+=======
+  .ui__input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+  }
+
+  .ui__input:focus {
+    border-color: #cc1111;
+    box-shadow:
+      inset 0 0 10px rgba(139, 0, 0, 0.3),
+      0 0 8px rgba(204, 17, 17, 0.5);
+  }
+
+  .ui__btn {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.78rem;
+>>>>>>> d593137cd941e4a3fa8ece548096203d2b2eecc5
     letter-spacing: 2px;
     text-transform: uppercase;
     border: none;
     cursor: pointer;
+<<<<<<< HEAD
     padding: 0;
     clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
     transition: all 0.15s;
@@ -403,6 +556,21 @@
 
   .ui__btn:disabled { opacity: 0.3; cursor: not-allowed; }
   .ui__btn:active:not(:disabled) { transform: translateY(1px); }
+=======
+    padding: 10px 18px;
+    clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
+    transition: all 0.15s;
+  }
+
+  .ui__btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+
+  .ui__btn:active:not(:disabled) {
+    transform: translateY(1px);
+  }
+>>>>>>> d593137cd941e4a3fa8ece548096203d2b2eecc5
 
   .ui__btn--bet,
   .ui__btn--hit {
@@ -416,7 +584,11 @@
   .ui__btn--bet:hover:not(:disabled),
   .ui__btn--hit:hover:not(:disabled) {
     background: #cc1111;
+<<<<<<< HEAD
     box-shadow: 0 0 20px rgba(204, 17, 17, 0.8);
+=======
+    box-shadow: 0 0 18px rgba(204, 17, 17, 0.8);
+>>>>>>> d593137cd941e4a3fa8ece548096203d2b2eecc5
   }
 
   .ui__btn--stand {
@@ -428,15 +600,22 @@
 
   .ui__btn--stand:hover:not(:disabled) {
     background: rgba(60, 35, 8, 0.9);
+<<<<<<< HEAD
     box-shadow: 0 0 16px rgba(212, 130, 10, 0.5);
+=======
+    box-shadow: 0 0 14px rgba(212, 130, 10, 0.5);
+>>>>>>> d593137cd941e4a3fa8ece548096203d2b2eecc5
   }
 
   .ui__btn--deny {
     background: rgba(20, 14, 8, 0.9);
     color: #6b5a45;
     border: 1px solid #3d2810;
+<<<<<<< HEAD
     min-width: auto;
     padding: 10px 16px;
+=======
+>>>>>>> d593137cd941e4a3fa8ece548096203d2b2eecc5
   }
 
   .ui__btn--deny:hover {
@@ -453,19 +632,28 @@
   }
 
   .ui__btn--restart:hover {
+<<<<<<< HEAD
     box-shadow: 0 0 22px rgba(77, 255, 77, 0.5);
     background: rgba(15, 40, 15, 0.9);
+=======
+    box-shadow: 0 0 20px rgba(77, 255, 77, 0.5);
+>>>>>>> d593137cd941e4a3fa8ece548096203d2b2eecc5
   }
 
   .ui__hint {
     font-family: 'Share Tech Mono', monospace;
+<<<<<<< HEAD
     font-size: 0.65rem;
+=======
+    font-size: 0.68rem;
+>>>>>>> d593137cd941e4a3fa8ece548096203d2b2eecc5
     color: #663333;
     letter-spacing: 1px;
   }
 
   .ui__warn {
     font-family: 'Share Tech Mono', monospace;
+<<<<<<< HEAD
     font-size: 0.68rem;
     color: #ff5030;
     letter-spacing: 2px;
@@ -473,6 +661,13 @@
     animation: flicker 2s infinite;
     width: 100%;
     text-align: center;
+=======
+    font-size: 0.72rem;
+    color: #ff3030;
+    letter-spacing: 2px;
+    text-shadow: 0 0 8px rgba(255, 48, 48, 0.7);
+    animation: flicker 2s infinite;
+>>>>>>> d593137cd941e4a3fa8ece548096203d2b2eecc5
   }
 
   .ui__result-msg {
@@ -486,6 +681,7 @@
     animation: flicker 3s infinite;
   }
 
+<<<<<<< HEAD
   /* ── HUD ── */
   .ui__hud {
     display: flex;
@@ -494,15 +690,28 @@
     gap: 24px;
     padding-top: 5px;
     border-top: 1px solid rgba(61, 40, 16, 0.35);
+=======
+  .ui__hud {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    padding-top: 6px;
+    border-top: 1px solid rgba(61, 40, 16, 0.4);
+>>>>>>> d593137cd941e4a3fa8ece548096203d2b2eecc5
   }
 
   .ui__hud-item {
     font-family: 'Share Tech Mono', monospace;
+<<<<<<< HEAD
     font-size: 0.7rem;
+=======
+    font-size: 0.72rem;
+>>>>>>> d593137cd941e4a3fa8ece548096203d2b2eecc5
     color: #6b5a45;
     letter-spacing: 1px;
   }
 
+<<<<<<< HEAD
   .ui__hud-item strong { color: #aa8855; }
 
   .ui__hud-item--bet {
@@ -522,5 +731,28 @@
   @keyframes flicker {
     0%, 91%, 93%, 95%, 100% { opacity: 1; }
     92%, 94% { opacity: 0.5; }
+=======
+  .ui__hud-item--bet {
+    color: #ff3030;
+    text-shadow: 0 0 6px rgba(255, 48, 48, 0.6);
+  }
+
+  .ui__hud-item--wins {
+    color: #5a6b45;
+  }
+
+  @keyframes flicker {
+    0%,
+    91%,
+    93%,
+    95%,
+    100% {
+      opacity: 1;
+    }
+    92%,
+    94% {
+      opacity: 0.55;
+    }
+>>>>>>> d593137cd941e4a3fa8ece548096203d2b2eecc5
   }
 </style>
